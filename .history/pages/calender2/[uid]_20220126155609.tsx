@@ -1,0 +1,31 @@
+import React, { useState } from "react";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import Header from "../../components/templates/Header";
+
+moment.locale("en-GB");
+const localizer = momentLocalizer(moment);
+
+export default function ReactBigCalendar() {
+  const handleSelect = ({ start, end }) => {
+    console.log(start);
+    console.log(end);
+    const title = window.prompt("New Event name");
+    return (
+      <div className="App">
+        <Header />
+        <Calendar
+          views={["day", "agenda", "work_week", "month"]}
+          selectable
+          localizer={localizer}
+          defaultDate={new Date()}
+          defaultView="month"
+          style={{ height: "100vh" }}
+          onSelectEvent={(event) => alert(event.title)}
+          onSelectSlot={handleSelect}
+        />
+      </div>
+    );
+  };
+}
