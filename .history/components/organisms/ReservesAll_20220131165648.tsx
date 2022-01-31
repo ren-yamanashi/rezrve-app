@@ -191,7 +191,7 @@ export default function ReservesAll() {
   return (
     <React.Fragment>
       <Box ml={3}>
-        <Title>予約一覧</Title>
+        <Title>{`${user.displayName} 予約一覧`}</Title>
       </Box>
       <Box ml={3}>
         <Button onClick={() => router.push(`/reserve/${user.uid}`)}>
