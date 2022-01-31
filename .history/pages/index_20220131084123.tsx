@@ -1,3 +1,6 @@
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
 import React, { useState, FC, useEffect, FormEvent } from "react";
 import {
   createUserWithEmailAndPassword,
@@ -24,8 +27,8 @@ import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import Link from "next/link";
 //内部インポート
-import { useAuth } from "../../hooks/useUserAuth";
-import Header2 from "../../components/templates/Header2";
+import { useAuth } from "../hooks/useUserAuth";
+import Header2 from "../components/templates/Header2";
 
 /**===========================================================
              *@param event サインイン画面を作成
@@ -142,9 +145,12 @@ const SignUpPage: FC = () => {
               </Box>
               <Divider />
               <Box textAlign="center" mt={1}>
-                <Button>
-                  <Link href="/">パスワードを忘れた</Link>
-                </Button>
+                <Typography>
+                  アカウントをお持ちの方は
+                  <Button>
+                    <Link href="/">こちら</Link>
+                  </Button>
+                </Typography>
               </Box>
             </Box>
           </Box>
