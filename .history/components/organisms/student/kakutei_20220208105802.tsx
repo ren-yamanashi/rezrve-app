@@ -45,7 +45,6 @@ export default function YoyakuKakutei() {
   const [student, setStudent] = useState("");
   const [course, setCourse] = useState("");
   const [reserved, setReserved] = useState<boolean>(false);
-  const [test, setTest] = useState<string>("");
   const timestamp = (datetimeStr: any) => {
     return Timestamp.fromDate(new Date(datetimeStr));
   };
@@ -81,9 +80,6 @@ export default function YoyakuKakutei() {
    *==========*/
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const u = user;
-    setTest(u.displayName);
-
     const { db, reserveCollection } = getCollections();
     const reserveRef = doc(reserveCollection);
     const db2 = getFirestore();
@@ -91,7 +87,7 @@ export default function YoyakuKakutei() {
       collection(db2, "FreeSpace"),
       where("reserved", "==", true),
       where("date", "==", reserves.date),
-      where("student", "==", test),
+      where("student", "==", user.displayName),
       where("time", "==", reserves.time)
     );
     const snapshot = await getDocs(q);
@@ -100,7 +96,7 @@ export default function YoyakuKakutei() {
     if (snapshot.empty) {
       await runTransaction(db, async (t: any) => {
         t.update(doc(reserveCollection, reserves.id), {
-          student: test,
+          student: user.displayName,
           course,
           reserved: true,
           reserverUid: user.uid,
@@ -143,7 +139,7 @@ export default function YoyakuKakutei() {
               name="studentName"
               label="お名前"
               fullWidth
-              defaultValue={test}
+              defaultValue={user.displayName}
               autoComplete="studentName"
               variant="standard"
               onChange={(e) => setStudent(e.target.value)}
