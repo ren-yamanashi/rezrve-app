@@ -3,10 +3,10 @@ import {
   collection,
   doc,
   getDoc,
-  getDocs,
   getFirestore,
-  query,
   runTransaction,
+  query,
+  serverTimestamp,
   Timestamp,
   where,
 } from "firebase/firestore";
@@ -24,10 +24,9 @@ import FormLabel from "@mui/material/FormLabel";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 //内部インポート
-//内部インポート
-import { useAuth } from "../../hooks/useUserAuth";
-import Header from "../templates/Header";
-import { FreeList } from "../../models/FreeList";
+import { useAuth } from "../../../hooks/useUserAuth";
+import Header from "../../templates/Header";
+import { FreeList } from "../../../models/FreeList";
 //queryの方を準備
 type Query = {
   id: string;
@@ -36,7 +35,7 @@ type Query = {
 /**===============
  * @returns 予約登録画面の作成 ※名前とコースを入力
  *===============*/
-export default function AddFixedReserve() {
+export default function YoyakuKakutei() {
   const router = useRouter();
   const query2 = router.query as Query;
   const [reserves, setReserves] = useState<FreeList>();
@@ -82,19 +81,24 @@ export default function AddFixedReserve() {
     e.preventDefault();
     const { db, reserveCollection } = getCollections();
     const reserveRef = doc(reserveCollection);
+    const db2 = getFirestore();
     const q = query(
-      collection(db, "FreeSpace"),
-      where("time", "==", reserves.time),
-      where("date", "==", reserves.date),
-      where("student", "==", student)
+      collection(db2, "FreeSpace"),
+      where("reserved", "==", true),
+      // where("date", "==", reserves.date),
+      where("student", "==", user.displayName),
+      where("time", "==", reserves.time)
     );
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) {
+    console.log(reserves.time);
+    console.log(new Date(reserves.date.toDate()));
+    if (q === null) {
       await runTransaction(db, async (t: any) => {
         t.update(doc(reserveCollection, reserves.id), {
-          student,
+          student: user.displayName,
           course,
           reserved: true,
+          reserverUid: user.uid,
+          reserveAt: serverTimestamp(),
         });
       });
       setStudent("");
@@ -108,7 +112,7 @@ export default function AddFixedReserve() {
         progress: undefined,
       });
     } else {
-      window.alert("同時間帯で既に予約済みです");
+      window.alert("同時間帯ですでに予約済みです");
       return;
     }
   }
@@ -131,8 +135,9 @@ export default function AddFixedReserve() {
               required
               id="studentName"
               name="studentName"
-              label="生徒名"
+              label="お名前"
               fullWidth
+              defaultValue={user.displayName}
               autoComplete="studentName"
               variant="standard"
               onChange={(e) => setStudent(e.target.value)}
@@ -211,7 +216,7 @@ export default function AddFixedReserve() {
             </Button>
           </Box>
           <Box pr="20vw" textAlign="right" fontSize={20} borderRadius={2}>
-            <Button onClick={() => router.push(`/shift/${user?.uid}`)}>
+            <Button onClick={() => router.push(`/shift/students/${user?.uid}`)}>
               戻る
             </Button>
           </Box>

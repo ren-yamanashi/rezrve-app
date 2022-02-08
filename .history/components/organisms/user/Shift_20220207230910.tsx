@@ -185,7 +185,7 @@ export default function Shifts() {
         <Table size="small">
           <TableHead style={{ backgroundColor: "#FFFFDD" }}>
             <TableRow>
-              <TableCell style={{ fontWeight: 600, width: "25%" }}>
+              <TableCell style={{ fontWeight: 600, width: "30%" }}>
                 <Box>講師名</Box>
               </TableCell>
               <TableCell style={{ fontWeight: 600 }}>

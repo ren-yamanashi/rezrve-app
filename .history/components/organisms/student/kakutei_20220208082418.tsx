@@ -3,12 +3,9 @@ import {
   collection,
   doc,
   getDoc,
-  getDocs,
   getFirestore,
-  query,
   runTransaction,
-  Timestamp,
-  where,
+  serverTimestamp,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import React, { useState, useEffect, FormEvent, useCallback } from "react";
@@ -24,10 +21,9 @@ import FormLabel from "@mui/material/FormLabel";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 //内部インポート
-//内部インポート
-import { useAuth } from "../../hooks/useUserAuth";
-import Header from "../templates/Header";
-import { FreeList } from "../../models/FreeList";
+import { useAuth } from "../../../hooks/useUserAuth";
+import Header from "../../templates/Header";
+import { FreeList } from "../../../models/FreeList";
 //queryの方を準備
 type Query = {
   id: string;
@@ -36,18 +32,15 @@ type Query = {
 /**===============
  * @returns 予約登録画面の作成 ※名前とコースを入力
  *===============*/
-export default function AddFixedReserve() {
+export default function YoyakuKakutei() {
   const router = useRouter();
-  const query2 = router.query as Query;
+  const query = router.query as Query;
   const [reserves, setReserves] = useState<FreeList>();
   //フォームの入力内容をステートに保管
   const { user } = useAuth();
   const [student, setStudent] = useState("");
   const [course, setCourse] = useState("");
   const [reserved, setReserved] = useState<boolean>(false);
-  const timestamp = (datetimeStr: any) => {
-    return Timestamp.fromDate(new Date(datetimeStr));
-  };
   //collection設定
   function getCollections() {
     const db = getFirestore();
@@ -60,11 +53,11 @@ export default function AddFixedReserve() {
    * Firebaseからシフトを取り出す
    *===============*/
   async function loadReserve() {
-    if (query2.id === undefined) {
+    if (query.id === undefined) {
       return;
     }
     const { reserveCollection } = getCollections();
-    const reserveDoc = await getDoc(doc(reserveCollection, query2.id)); //idを取り出す
+    const reserveDoc = await getDoc(doc(reserveCollection, query.id)); //idを取り出す
     if (!reserveDoc.exists()) {
       return;
     }
@@ -74,6 +67,7 @@ export default function AddFixedReserve() {
       setReserved(true);
     }
     setReserves(gotReserve);
+    console.log(reserves.time);
   }
   /**==========
    * 予約登録
@@ -82,39 +76,29 @@ export default function AddFixedReserve() {
     e.preventDefault();
     const { db, reserveCollection } = getCollections();
     const reserveRef = doc(reserveCollection);
-    const q = query(
-      collection(db, "FreeSpace"),
-      where("time", "==", reserves.time),
-      where("date", "==", reserves.date),
-      where("student", "==", student)
-    );
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) {
-      await runTransaction(db, async (t: any) => {
-        t.update(doc(reserveCollection, reserves.id), {
-          student,
-          course,
-          reserved: true,
-        });
+    await runTransaction(db, async (t: any) => {
+      t.update(doc(reserveCollection, reserves.id), {
+        student,
+        course,
+        reserved: true,
+        reserverUid: user.uid,
+        reserveAt: serverTimestamp(),
       });
-      setStudent("");
-      setCourse("");
-      toast.success("予約を登録しました", {
-        position: "bottom-left",
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } else {
-      window.alert("同時間帯で既に予約済みです");
-      return;
-    }
+    });
+    setStudent("");
+    setCourse("");
+    toast.success("予約を登録しました", {
+      position: "bottom-left",
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   }
   useEffect(() => {
     loadReserve();
-  }, [query2.id]);
+  }, [query.id]);
   return (
     <>
       <Header />
@@ -131,7 +115,7 @@ export default function AddFixedReserve() {
               required
               id="studentName"
               name="studentName"
-              label="生徒名"
+              label="お名前"
               fullWidth
               autoComplete="studentName"
               variant="standard"
@@ -211,7 +195,7 @@ export default function AddFixedReserve() {
             </Button>
           </Box>
           <Box pr="20vw" textAlign="right" fontSize={20} borderRadius={2}>
-            <Button onClick={() => router.push(`/shift/${user?.uid}`)}>
+            <Button onClick={() => router.push(`/shift/students/${user?.uid}`)}>
               戻る
             </Button>
           </Box>

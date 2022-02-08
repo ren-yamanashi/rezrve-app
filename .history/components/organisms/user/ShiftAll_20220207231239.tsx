@@ -13,11 +13,11 @@ import {
 } from "firebase/firestore";
 import { browser } from "process";
 import React, { useEffect, useState } from "react";
-import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Tooltip from "@mui/material/Tooltip";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
@@ -55,7 +55,7 @@ const style = {
 
 //予約一覧ページ　予約済みフラグ(reserved)が true のみ表示
 //シフト提出者IDとユーザーIDが一致する予約のみ表示
-export default function Shifts() {
+export default function ShiftsAll() {
   const [reserves, setReserves] = useState<FreeList[]>([]);
   const { user } = useAuth();
   const router = useRouter();
@@ -92,7 +92,6 @@ export default function Shifts() {
       const db = getFirestore();
       const q = query(
         collection(db, "FreeSpace"),
-        where("senderUid", "==", user.uid),
         orderBy("date", "desc"),
         orderBy("time", "asc")
       );
@@ -118,7 +117,23 @@ export default function Shifts() {
     const db = getFirestore();
     const q = query(
       collection(db, "FreeSpace"),
-      where("senderUid", "==", user.uid),
+      orderBy("date", "desc"),
+      orderBy("time", "asc")
+    );
+    const snapshot = await getDocs(q);
+    const gotReservers = snapshot.docs.map((doc) => {
+      const reserve = doc.data() as FreeList;
+      reserve.id = doc.id;
+      return reserve;
+    });
+    setReserves(gotReservers);
+  };
+  //入力された講師名 & 週目と曜日と時間で並び替え
+  const FilterTeacher = async () => {
+    const db = getFirestore();
+    const q = query(
+      collection(db, "FreeSpace"),
+      where("teacher", "==", sortTeacher),
       orderBy("date", "desc"),
       orderBy("time", "asc")
     );
@@ -136,7 +151,6 @@ export default function Shifts() {
     const q = query(
       collection(db, "FreeSpace"),
       where("date", ">=", timestamp(xxx)),
-      where("senderUid", "==", user.uid),
       orderBy("date", "desc"),
       orderBy("time", "asc")
     );
@@ -155,7 +169,6 @@ export default function Shifts() {
     const db = getFirestore();
     const q = query(
       collection(db, "FreeSpace"),
-      where("senderUid", "==", user.uid),
       orderBy("date", "desc"),
       orderBy("time", "asc")
     );
@@ -177,16 +190,60 @@ export default function Shifts() {
         </Box>
         {test.indexOf("管理者") !== -1 && (
           <Box ml={3}>
-            <Button onClick={() => router.push(`/shift/list/all/${user.uid}`)}>
-              全講師のシフトを見る
+            <Button onClick={() => router.push(`/shift/list/${user.uid}`)}>
+              シフト一覧へ戻る
             </Button>
           </Box>
         )}
         <Table size="small">
           <TableHead style={{ backgroundColor: "#FFFFDD" }}>
             <TableRow>
-              <TableCell style={{ fontWeight: 600, width: "25%" }}>
-                <Box>講師名</Box>
+              <TableCell style={{ fontWeight: 600 }}>
+                <Box>
+                  講師名
+                  <IconButton onClick={handleOpen}>
+                    <FilterListIcon />
+                  </IconButton>
+                  <IconButton onClick={sortReset}>
+                    <RestartAltIcon />
+                  </IconButton>
+                  <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <Box alignItems="top" m={0}>
+                        <IconButton onClick={handleClose}>
+                          <CloseIcon />
+                        </IconButton>
+                      </Box>
+                      <Box textAlign="center">
+                        <TextField
+                          margin="normal"
+                          required
+                          id="sortTeacher"
+                          label="講師名で絞り込み"
+                          name="sortTeacher"
+                          autoComplete="sortTeacher"
+                          autoFocus
+                          onChange={(e) => setSortTeacher(e.target.value)}
+                        />
+                        <Button
+                          type="submit"
+                          onClick={() => {
+                            FilterTeacher(), handleClose();
+                          }}
+                          variant="contained"
+                          sx={{ mt: 3, mb: 2, ml: 3 }}
+                        >
+                          決定
+                        </Button>
+                      </Box>
+                    </Box>
+                  </Modal>
+                </Box>
               </TableCell>
               <TableCell style={{ fontWeight: 600 }}>
                 <Box>
@@ -215,22 +272,20 @@ export default function Shifts() {
                   {dayjs(rsv.date.toDate()).format("YYYY/MM/DD ")}
                 </TableCell>
                 <TableCell>
-                  <Box display="flex" alignItems="center">
-                    {`${rsv.time}:30`}
-                    <Tooltip title="シフトを閉じる" arrow>
-                      <IconButton onClick={(e) => deleteShift(rsv.id, e)}>
-                        <DeleteIcon
-                          sx={{
-                            fontSize: 30,
-                            color: teal[500],
-                          }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
+                  {`${rsv.time}:30`}
+                  <Tooltip title="シフトを閉じる" arrow>
+                    <IconButton onClick={(e) => deleteShift(rsv.id, e)}>
+                      <DeleteIcon
+                        sx={{
+                          fontSize: 30,
+                          color: teal[500],
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>
-                  {rsv.student === "" ? "未予約" : "予約済み"}
+                  {rsv.student == "" ? "未予約" : "予約済み"}
                 </TableCell>
               </TableRow>
             ))}

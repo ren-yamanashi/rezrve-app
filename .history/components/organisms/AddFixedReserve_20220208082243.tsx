@@ -3,11 +3,9 @@ import {
   collection,
   doc,
   getDoc,
-  getDocs,
   getFirestore,
   query,
   runTransaction,
-  Timestamp,
   where,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
@@ -45,9 +43,6 @@ export default function AddFixedReserve() {
   const [student, setStudent] = useState("");
   const [course, setCourse] = useState("");
   const [reserved, setReserved] = useState<boolean>(false);
-  const timestamp = (datetimeStr: any) => {
-    return Timestamp.fromDate(new Date(datetimeStr));
-  };
   //collection設定
   function getCollections() {
     const db = getFirestore();
@@ -74,7 +69,10 @@ export default function AddFixedReserve() {
       setReserved(true);
     }
     setReserves(gotReserve);
+    console.log(reserves);
+    console.log(reserves.time);
   }
+  loadReserve();
   /**==========
    * 予約登録
    *==========*/
@@ -88,33 +86,26 @@ export default function AddFixedReserve() {
       where("date", "==", reserves.date),
       where("student", "==", student)
     );
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) {
-      await runTransaction(db, async (t: any) => {
-        t.update(doc(reserveCollection, reserves.id), {
-          student,
-          course,
-          reserved: true,
-        });
+
+    await runTransaction(db, async (t: any) => {
+      t.update(doc(reserveCollection, reserves.id), {
+        student,
+        course,
+        reserved: true,
       });
-      setStudent("");
-      setCourse("");
-      toast.success("予約を登録しました", {
-        position: "bottom-left",
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } else {
-      window.alert("同時間帯で既に予約済みです");
-      return;
-    }
+    });
+    setStudent("");
+    setCourse("");
+    toast.success("予約を登録しました", {
+      position: "bottom-left",
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   }
-  useEffect(() => {
-    loadReserve();
-  }, [query2.id]);
+  useEffect(() => {}, [query2.id]);
   return (
     <>
       <Header />

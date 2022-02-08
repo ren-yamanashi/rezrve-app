@@ -185,7 +185,7 @@ export default function Shifts() {
         <Table size="small">
           <TableHead style={{ backgroundColor: "#FFFFDD" }}>
             <TableRow>
-              <TableCell style={{ fontWeight: 600, width: "25%" }}>
+              <TableCell style={{ fontWeight: 600 }}>
                 <Box>講師名</Box>
               </TableCell>
               <TableCell style={{ fontWeight: 600 }}>
@@ -214,20 +214,20 @@ export default function Shifts() {
                 <TableCell>
                   {dayjs(rsv.date.toDate()).format("YYYY/MM/DD ")}
                 </TableCell>
-                <TableCell>
-                  <Box display="flex" alignItems="center">
-                    {`${rsv.time}:30`}
-                    <Tooltip title="シフトを閉じる" arrow>
-                      <IconButton onClick={(e) => deleteShift(rsv.id, e)}>
-                        <DeleteIcon
-                          sx={{
-                            fontSize: 30,
-                            color: teal[500],
-                          }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
+                <TableCell sx={{ display: "flex", mt: 2 }}>
+                  {`${rsv.time}:30`}
+                  <Tooltip title="シフトを閉じる" arrow>
+                    <IconButton onClick={(e) => deleteShift(rsv.id, e)}>
+                      <DeleteIcon
+                        sx={{
+                          fontSize: 30,
+                          color: teal[500],
+                          mt: 2,
+                          mb: 2,
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>
                   {rsv.student === "" ? "未予約" : "予約済み"}

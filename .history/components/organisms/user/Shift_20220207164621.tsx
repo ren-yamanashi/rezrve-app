@@ -13,8 +13,6 @@ import {
 } from "firebase/firestore";
 import { browser } from "process";
 import React, { useEffect, useState } from "react";
-import Tooltip from "@mui/material/Tooltip";
-import DeleteIcon from "@mui/icons-material/Delete";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -38,7 +36,6 @@ import { useRouter } from "next/router";
 import { useAuth } from "../../../hooks/useUserAuth";
 import { FreeList } from "../../../models/FreeList";
 import Title from "../../atoms/Title";
-import { teal } from "@mui/material/colors";
 
 //Modalのスタイル
 const style = {
@@ -156,7 +153,8 @@ export default function Shifts() {
     const q = query(
       collection(db, "FreeSpace"),
       where("senderUid", "==", user.uid),
-      orderBy("date", "desc"),
+      where("reserved", "==", false),
+      where("date", "==", timestamp(xxx)),
       orderBy("time", "asc")
     );
     e.stopPropagation();
@@ -185,7 +183,7 @@ export default function Shifts() {
         <Table size="small">
           <TableHead style={{ backgroundColor: "#FFFFDD" }}>
             <TableRow>
-              <TableCell style={{ fontWeight: 600, width: "25%" }}>
+              <TableCell style={{ fontWeight: 600 }}>
                 <Box>講師名</Box>
               </TableCell>
               <TableCell style={{ fontWeight: 600 }}>
@@ -214,21 +212,7 @@ export default function Shifts() {
                 <TableCell>
                   {dayjs(rsv.date.toDate()).format("YYYY/MM/DD ")}
                 </TableCell>
-                <TableCell>
-                  <Box display="flex" alignItems="center">
-                    {`${rsv.time}:30`}
-                    <Tooltip title="シフトを閉じる" arrow>
-                      <IconButton onClick={(e) => deleteShift(rsv.id, e)}>
-                        <DeleteIcon
-                          sx={{
-                            fontSize: 30,
-                            color: teal[500],
-                          }}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
-                </TableCell>
+                <TableCell>{`${rsv.time}:30`}</TableCell>
                 <TableCell>
                   {rsv.student === "" ? "未予約" : "予約済み"}
                 </TableCell>

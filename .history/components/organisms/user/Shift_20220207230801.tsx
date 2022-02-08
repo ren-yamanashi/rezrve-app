@@ -185,7 +185,7 @@ export default function Shifts() {
         <Table size="small">
           <TableHead style={{ backgroundColor: "#FFFFDD" }}>
             <TableRow>
-              <TableCell style={{ fontWeight: 600, width: "25%" }}>
+              <TableCell style={{ fontWeight: 600 }}>
                 <Box>講師名</Box>
               </TableCell>
               <TableCell style={{ fontWeight: 600 }}>
@@ -215,7 +215,7 @@ export default function Shifts() {
                   {dayjs(rsv.date.toDate()).format("YYYY/MM/DD ")}
                 </TableCell>
                 <TableCell>
-                  <Box display="flex" alignItems="center">
+                  <Box display="flex" my="auto">
                     {`${rsv.time}:30`}
                     <Tooltip title="シフトを閉じる" arrow>
                       <IconButton onClick={(e) => deleteShift(rsv.id, e)}>

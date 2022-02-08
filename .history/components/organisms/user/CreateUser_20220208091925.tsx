@@ -114,39 +114,32 @@ export default function EditReserve() {
     const v = i.shift();
     const q = query(
       collection(db, "FreeSpace"),
-      where("teacher", "==", v),
       where("time", "==", time),
       where("date", "==", timestamp(xxx))
     );
-    const snapshot = await getDocs(q);
-    if (snapshot.empty) {
-      e.preventDefault();
-      setSending(true);
-      await addDoc(collection(db, "FreeSpace"), {
-        teacher: v,
-        student: "",
-        date: timestamp(xxx),
-        reserved: false,
-        completed: false,
-        time,
-        createAt: serverTimestamp(),
-        senderUid: user.uid,
-      });
-      setSending(false);
-      setTime(null);
-      toast.success("登録が完了しました", {
-        position: "bottom-left",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } else {
-      window.alert("既に提出済みです");
-      return;
-    }
+    e.preventDefault();
+    setSending(true);
+    await addDoc(collection(db, "FreeSpace"), {
+      teacher: v,
+      student: "",
+      date: timestamp(xxx),
+      reserved: false,
+      completed: false,
+      time,
+      createAt: serverTimestamp(),
+      senderUid: user.uid,
+    });
+    setSending(false);
+    setTime(null);
+    toast.success("登録が完了しました", {
+      position: "bottom-left",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
   /**==========
    * 更新

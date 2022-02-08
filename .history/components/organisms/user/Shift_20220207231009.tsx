@@ -188,7 +188,7 @@ export default function Shifts() {
               <TableCell style={{ fontWeight: 600, width: "25%" }}>
                 <Box>講師名</Box>
               </TableCell>
-              <TableCell style={{ fontWeight: 600 }}>
+              <TableCell style={{ fontWeight: 600, width: "30%" }}>
                 <Box>
                   日時
                   <IconButton
