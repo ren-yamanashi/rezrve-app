@@ -60,7 +60,6 @@ const LoginPage: FC = () => {
    * @param event role設定
    *=======*/
   const Login = async (event: any) => {
-    console.log(user);
     setErr(false);
     event.preventDefault();
     const db = getFirestore();

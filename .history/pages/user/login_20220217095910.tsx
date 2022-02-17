@@ -32,10 +32,10 @@ import {
 } from "firebase/firestore";
 
 //内部インポート
-import { useAuth } from "../../../hooks/useUserAuth";
-import Header2 from "../../../components/templates/Header2";
+import { useAuth } from "../../hooks/useUserAuth";
+import Header2 from "../../components/templates/Header2";
 import { browser } from "process";
-import { User } from "../../../models/User";
+import { User } from "../../models/User";
 
 const LoginPage: FC = () => {
   const theme = createTheme();
@@ -60,16 +60,12 @@ const LoginPage: FC = () => {
    * @param event role設定
    *=======*/
   const Login = async (event: any) => {
-    console.log(user);
     setErr(false);
     event.preventDefault();
     const db = getFirestore();
     const usersCollection = collection(db, "users");
     const userRef = doc(usersCollection, user.uid);
     const document = await getDoc(userRef);
-    await updateDoc(userRef, {
-      role: "teacher",
-    });
     await signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         {
@@ -77,7 +73,7 @@ const LoginPage: FC = () => {
             console.log(user.displayName);
             router.push(`/user/profile/${user?.uid}`);
             updateDoc(userRef, {
-              role: "teacher",
+              role: "student",
             });
           } else {
             console.log(user.displayName);
