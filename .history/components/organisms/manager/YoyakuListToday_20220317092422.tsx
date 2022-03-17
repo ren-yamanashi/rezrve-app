@@ -205,7 +205,7 @@ export default function YoyakuListToday() {
                       </TableCell>
                       <TableCell>
                         {`${rsv.time}:00`}
-                        <Tooltip title="詳細確認・キャンセル" arrow>
+                        <Tooltip title="キャンセル・変更" arrow>
                           <IconButton
                             onClick={() => {
                               handleOpen();

@@ -175,6 +175,7 @@ export default function Calendar1() {
         return free;
       });
       setFreeLists(gotFreeList);
+      setFreeLists(gotFreeList);
     });
   };
   return (

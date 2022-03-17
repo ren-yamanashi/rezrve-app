@@ -185,10 +185,24 @@ export default function EditReserve() {
                               予約者名
                             </Typography>
                           </Grid>
-                          <Grid item xs={10} md={20} textAlign="left">
-                            <Typography variant="h5" component="div">
-                              {reserves.student}
-                            </Typography>
+                          <Grid item xs={10} md={20}>
+                            <Box
+                              component="form"
+                              noValidate
+                              onSubmit={onSubmit}
+                            >
+                              <TextField
+                                required
+                                id="outlined"
+                                name="studentName"
+                                label="生徒名を変更"
+                                inputProps={{ style: { fontSize: 20 } }}
+                                fullWidth
+                                defaultValue={reserves.student}
+                                variant="filled"
+                                onChange={(e) => setStudent(e.target.value)}
+                              />
+                            </Box>
                           </Grid>
                         </Box>
                       </Item>

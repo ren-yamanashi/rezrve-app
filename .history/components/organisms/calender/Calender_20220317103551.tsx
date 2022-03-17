@@ -163,7 +163,6 @@ export default function Calendar1() {
       });
       const q = query(
         collection(db, "FreeSpace"),
-        where("senderUid", "==", user.uid),
         where("reserved", "==", true),
         orderBy("time")
       );

@@ -213,7 +213,7 @@ export default function ReservesAll() {
       student: "",
       reserverUid: "",
     }).then(async () => {
-      handleClose2();
+      handleClose();
       toast.success("キャンセルしました", {
         position: "bottom-left",
         hideProgressBar: false,
@@ -224,22 +224,21 @@ export default function ReservesAll() {
       });
       const q = query(
         collection(db, "FreeSpace"),
+        where("date", "==", timestamp(xxx)),
         where("reserved", "==", true),
-        where("date", ">=", timestamp(xxx)),
-        where("date", "<=", timestamp(xxx7)),
-        orderBy("date", "asc"),
         orderBy("time", "asc")
       );
       const snapshot = await getDocs(q);
       if (snapshot.empty) {
         setErr(true);
       }
-      const gotReservers = snapshot.docs.map((doc) => {
+      //ReserveList一覧の展開
+      const gotReserves = snapshot.docs.map((doc) => {
         const reserve = doc.data() as FreeList;
         reserve.id = doc.id;
         return reserve;
       });
-      setReserves(gotReservers);
+      setReserves(gotReserves);
     });
   };
   return (
@@ -446,10 +445,10 @@ export default function ReservesAll() {
               </TableCell>
               <TableCell>
                 {`${rsv.time}:00`}
-                <Tooltip title="詳細確認・キャンセル" arrow>
+                <Tooltip title="キャンセル・変更" arrow>
                   <IconButton
                     onClick={() => {
-                      handleOpen2();
+                      handleOpen();
                       setRsvId(rsv.id);
                       setStudent(rsv.student);
                       setTeacher(rsv.teacher);

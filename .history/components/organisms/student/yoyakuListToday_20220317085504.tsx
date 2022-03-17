@@ -143,7 +143,6 @@ export default function YoyakuListToday() {
       student: "",
       reserverUid: "",
     }).then(async () => {
-      handleClose();
       toast.success("キャンセルしました", {
         position: "bottom-left",
         hideProgressBar: false,
@@ -294,17 +293,9 @@ export default function YoyakuListToday() {
                             {`${rsv.time}:00`}
                             <Tooltip title="詳細確認・キャンセル" arrow>
                               <IconButton
-                                onClick={() => {
-                                  handleOpen();
-                                  setRsvId(rsv.id);
-                                  setStudent(rsv.student);
-                                  setTeacher(rsv.teacher);
-                                  setRsvDate(
-                                    `${dayjs(rsv.date.toDate()).format(
-                                      "YYYY/MM/DD "
-                                    )} ${rsv.time}:00~`
-                                  );
-                                }}
+                                onClick={() =>
+                                  router.push(`/reserve/edit/${rsv.id}`)
+                                }
                               >
                                 <EditIcon
                                   sx={{ color: "teal", ml: 1, fontSize: 15 }}

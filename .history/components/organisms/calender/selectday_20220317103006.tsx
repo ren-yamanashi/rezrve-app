@@ -1642,6 +1642,7 @@ export default function SelectDayAll() {
                     </Tooltip>
                   )
                 )}
+
                 {e17 == true && (
                   <Tooltip title="シフトを申請" arrow>
                     <TableCell

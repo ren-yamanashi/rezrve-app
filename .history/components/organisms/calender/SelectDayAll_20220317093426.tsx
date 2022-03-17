@@ -1112,8 +1112,6 @@ export default function SelectDayAll() {
                       freeLists11.map((item) => {
                         uu.userName == item.teacher && setRsvNum(item.id);
                         uu.userName == item.teacher && setTeacher(item.teacher);
-                        uu.userName == item.teacher &&
-                          setStudent2(item.student);
                         uu.userName == item.teacher && setRsvTime(item.time);
                         uu.userName == item.teacher &&
                           setRsvDate(
@@ -1195,8 +1193,6 @@ export default function SelectDayAll() {
                       freeLists12.map((item) => {
                         uu.userName == item.teacher && setRsvNum(item.id);
                         uu.userName == item.teacher && setTeacher(item.teacher);
-                        uu.userName == item.teacher &&
-                          setStudent2(item.student);
                         uu.userName == item.teacher && setRsvTime(item.time);
                         uu.userName == item.teacher &&
                           setRsvDate(
@@ -1278,8 +1274,6 @@ export default function SelectDayAll() {
                       freeLists13.map((item) => {
                         uu.userName == item.teacher && setRsvNum(item.id);
                         uu.userName == item.teacher && setTeacher(item.teacher);
-                        uu.userName == item.teacher &&
-                          setStudent2(item.student);
                         uu.userName == item.teacher && setRsvTime(item.time);
                         uu.userName == item.teacher &&
                           setRsvDate(
@@ -1361,8 +1355,6 @@ export default function SelectDayAll() {
                       freeLists14.map((item) => {
                         uu.userName == item.teacher && setRsvNum(item.id);
                         uu.userName == item.teacher && setTeacher(item.teacher);
-                        uu.userName == item.teacher &&
-                          setStudent2(item.student);
                         uu.userName == item.teacher && setRsvTime(item.time);
                         uu.userName == item.teacher &&
                           setRsvDate(
@@ -1444,8 +1436,6 @@ export default function SelectDayAll() {
                       freeLists15.map((item) => {
                         uu.userName == item.teacher && setRsvNum(item.id);
                         uu.userName == item.teacher && setTeacher(item.teacher);
-                        uu.userName == item.teacher &&
-                          setStudent2(item.student);
                         uu.userName == item.teacher && setRsvTime(item.time);
                         uu.userName == item.teacher &&
                           setRsvDate(
@@ -1527,8 +1517,6 @@ export default function SelectDayAll() {
                       freeLists16.map((item) => {
                         uu.userName == item.teacher && setRsvNum(item.id);
                         uu.userName == item.teacher && setTeacher(item.teacher);
-                        uu.userName == item.teacher &&
-                          setStudent2(item.student);
                         uu.userName == item.teacher && setRsvTime(item.time);
                         uu.userName == item.teacher &&
                           setRsvDate(
@@ -1610,8 +1598,6 @@ export default function SelectDayAll() {
                       freeLists17.map((item) => {
                         uu.userName == item.teacher && setRsvNum(item.id);
                         uu.userName == item.teacher && setTeacher(item.teacher);
-                        uu.userName == item.teacher &&
-                          setStudent2(item.student);
                         uu.userName == item.teacher && setRsvTime(item.time);
                         uu.userName == item.teacher &&
                           setRsvDate(
@@ -1693,8 +1679,6 @@ export default function SelectDayAll() {
                       freeLists18.map((item) => {
                         uu.userName == item.teacher && setRsvNum(item.id);
                         uu.userName == item.teacher && setTeacher(item.teacher);
-                        uu.userName == item.teacher &&
-                          setStudent2(item.student);
                         uu.userName == item.teacher && setRsvTime(item.time);
                         uu.userName == item.teacher &&
                           setRsvDate(

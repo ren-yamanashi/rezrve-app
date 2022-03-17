@@ -122,9 +122,6 @@ export default function Calendar1() {
       start: new Date(e.date.toDate().setHours(e.time)), //これだとできる
       // start:new Date (e.date), //これだとエラーになる ※dateはタイムスタンプ型
       end: new Date(e.date.toDate().setHours(e.time + 1)),
-      teacher: e.teacher,
-      student: e.student,
-      date: `${dayjs(e.date.toDate()).format("YYYY/MM/DD ")} ${e.time}:00~`,
     };
   });
   /**==========
@@ -137,9 +134,6 @@ export default function Calendar1() {
       start: new Date(e.date.toDate().setHours(e.time)), //これだとできる
       // start:new Date (e.date), //これだとエラーになる ※dateはタイムスタンプ型
       end: new Date(e.date.toDate().setHours(e.time + 1)),
-      teacher: e.teacher,
-      student: e.student,
-      date: `${dayjs(e.date.toDate()).format("YYYY/MM/DD ")} ${e.time}:00~`,
     };
   });
   /**=======
@@ -163,7 +157,6 @@ export default function Calendar1() {
       });
       const q = query(
         collection(db, "FreeSpace"),
-        where("senderUid", "==", user.uid),
         where("reserved", "==", true),
         orderBy("time")
       );

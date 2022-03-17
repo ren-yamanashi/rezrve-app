@@ -5,7 +5,9 @@ import { useState, useEffect, FormEvent, Children } from "react";
 //内部インポート
 import { User } from "../../../models/User";
 import YoyakuListToday from "../../../components/organisms/student/yoyakuListToday";
+
 import Header from "../../../components/templates/Header2";
+import Header2 from "../../../components/templates/Header";
 import RsvPage from "../../../components/organisms/student/RsvPage";
 import { Box } from "@mui/material";
 import { createMedia } from "@artsy/fresnel";
@@ -67,7 +69,7 @@ export default function HomePage() {
         </Media>
         <Media at="sm">
           <Header />
-          <Box mb={1}>
+          <Box my={3}>
             <YoyakuListToday />
           </Box>
           <Box my={3}>

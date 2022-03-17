@@ -6,8 +6,6 @@ import {
   where,
   getDocs,
   Timestamp,
-  updateDoc,
-  doc,
 } from "firebase/firestore";
 import { browser } from "process";
 import React, { useEffect, useState } from "react";
@@ -33,8 +31,6 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import SnackbarContent from "@mui/material/SnackbarContent";
-import { ToastContainer } from "react-toastify";
-import { toast } from "react-toastify";
 //内部インポート
 import { useAuth } from "../../../hooks/useUserAuth";
 import { FreeList } from "../../../models/FreeList";
@@ -88,7 +84,6 @@ export default function YoyakuListToday() {
   const [rsvDate, setRsvDate] = useState("");
   const [teacher, setTeacher] = useState("");
   const [student, setStudent] = useState("");
-  const [rsvId, setRsvId] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   //日付をTimeStamp型にして返す
@@ -133,46 +128,6 @@ export default function YoyakuListToday() {
     }
     loadReserves();
   }, [process, browser, user]);
-  /**=======
-   * キャンセル処理
-   *======*/
-  const deleteRsv = async (e: any) => {
-    e.stopPropagation();
-    await updateDoc(doc(db, "FreeSpace", rsvId), {
-      reserved: false,
-      student: "",
-      reserverUid: "",
-    }).then(async () => {
-      handleClose();
-      toast.success("キャンセルしました", {
-        position: "bottom-left",
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      const q = query(
-        collection(db, "FreeSpace"),
-        where("student", "==", user.displayName),
-        where("date", ">=", timestamp(xxx)),
-        where("reserved", "==", true),
-        orderBy("date", "desc"),
-        orderBy("time", "asc")
-      );
-      const snapshot = await getDocs(q);
-      if (snapshot.empty) {
-        setErr(true);
-      }
-      //ReserveList一覧の展開
-      const gotReserves = snapshot.docs.map((doc) => {
-        const reserve = doc.data() as FreeList;
-        reserve.id = doc.id;
-        return reserve;
-      });
-      setReserves(gotReserves);
-    });
-  };
   return (
     <React.Fragment>
       <MediaContextProvider>
@@ -229,11 +184,10 @@ export default function YoyakuListToday() {
                           </TableCell>
                           <TableCell>
                             {`${rsv.time}:00`}
-                            <Tooltip title="詳細確認・キャンセル" arrow>
+                            <Tooltip title="キャンセル" arrow>
                               <IconButton
                                 onClick={() => {
                                   handleOpen();
-                                  setRsvId(rsv.id);
                                   setStudent(rsv.student);
                                   setTeacher(rsv.teacher);
                                   setRsvDate(
@@ -292,19 +246,11 @@ export default function YoyakuListToday() {
                           </TableCell>
                           <TableCell style={{ fontSize: 12 }}>
                             {`${rsv.time}:00`}
-                            <Tooltip title="詳細確認・キャンセル" arrow>
+                            <Tooltip title="キャンセル" arrow>
                               <IconButton
-                                onClick={() => {
-                                  handleOpen();
-                                  setRsvId(rsv.id);
-                                  setStudent(rsv.student);
-                                  setTeacher(rsv.teacher);
-                                  setRsvDate(
-                                    `${dayjs(rsv.date.toDate()).format(
-                                      "YYYY/MM/DD "
-                                    )} ${rsv.time}:00~`
-                                  );
-                                }}
+                                onClick={() =>
+                                  router.push(`/reserve/edit/${rsv.id}`)
+                                }
                               >
                                 <EditIcon
                                   sx={{ color: "teal", ml: 1, fontSize: 15 }}
@@ -316,6 +262,181 @@ export default function YoyakuListToday() {
                       ))}
                     </TableBody>
                   </Table>
+                  {/* モーダル　予約内容詳細 */}
+                  <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <Stack
+                        spacing={2}
+                        sx={{ width: "100%", my: 3, mx: "auto" }}
+                      >
+                        <SnackbarContent
+                          sx={{
+                            bgcolor: blue[400],
+                            justifyContent: "center",
+                            boxShadow: "none",
+                            fontWeight: 600,
+                          }}
+                          message={"予約詳細"}
+                        />
+                      </Stack>
+                      <Item sx={{ my: 2 }}>
+                        <Box display="flex">
+                          <Typography
+                            variant="h5"
+                            component="div"
+                            color="black"
+                            textAlign="center"
+                            mx="auto"
+                            fontSize={19}
+                            width={90}
+                            fontWeight={500}
+                          >
+                            予約情報
+                          </Typography>
+                        </Box>
+                      </Item>
+                      <Item2 sx={{ my: 2 }}>
+                        <Box display="flex">
+                          <Typography
+                            variant="h5"
+                            component="div"
+                            ml={1}
+                            color="black"
+                            textAlign="left"
+                            fontSize={17}
+                            width={90}
+                            fontWeight={400}
+                          >
+                            予約日時
+                          </Typography>
+                          <Typography
+                            variant="h5"
+                            component="div"
+                            ml={5}
+                            color={grey[600]}
+                            textAlign="left"
+                            fontSize={17}
+                          >
+                            {rsvDate}
+                          </Typography>
+                        </Box>
+                      </Item2>
+                      <Item sx={{ my: 2 }}>
+                        <Box display="flex">
+                          <Typography
+                            variant="h5"
+                            component="div"
+                            ml={1}
+                            color="black"
+                            textAlign="left"
+                            fontSize={17}
+                            width={90}
+                            fontWeight={400}
+                          >
+                            担当者
+                          </Typography>
+                          <Typography
+                            variant="h5"
+                            component="div"
+                            ml={5}
+                            color={grey[600]}
+                            textAlign="left"
+                            fontSize={17}
+                          >
+                            {teacher}
+                          </Typography>
+                        </Box>
+                      </Item>
+                      <Item2 sx={{ my: 2 }}>
+                        <Box display="flex">
+                          <Typography
+                            variant="h5"
+                            component="div"
+                            ml={1}
+                            color="black"
+                            textAlign="left"
+                            fontSize={17}
+                            width={90}
+                            fontWeight={400}
+                          >
+                            お客様名
+                          </Typography>
+                          <Typography
+                            variant="h5"
+                            component="div"
+                            ml={5}
+                            color={grey[600]}
+                            textAlign="left"
+                            fontSize={17}
+                          >
+                            {student}
+                          </Typography>
+                        </Box>
+                      </Item2>
+                      <Item sx={{ my: 2 }}>
+                        <Box display="flex">
+                          <Typography
+                            variant="h5"
+                            component="div"
+                            ml={1}
+                            color="black"
+                            textAlign="left"
+                            fontSize={17}
+                            width={90}
+                            fontWeight={400}
+                          >
+                            予約状態
+                          </Typography>
+                          <Typography
+                            variant="h5"
+                            component="div"
+                            ml={5}
+                            color={grey[600]}
+                            textAlign="left"
+                            fontSize={17}
+                          >
+                            確定
+                          </Typography>
+                        </Box>
+                      </Item>
+                      <Box display="flex" justifyContent="right">
+                        <Button
+                          variant="contained"
+                          sx={{
+                            mt: 1,
+                            mb: 2,
+                            mr: 1,
+                            bgcolor: teal[400],
+                            color: "white",
+                            "&:hover": { bgcolor: teal[500] },
+                          }}
+                        >
+                          予約登録
+                        </Button>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            mt: 1,
+                            mb: 2,
+                            mr: 1,
+                            bgcolor: grey[500],
+                            color: "white",
+                            "&:hover": { bgcolor: grey[600] },
+                          }}
+                          onClick={() => {
+                            handleClose();
+                          }}
+                        >
+                          キャンセル
+                        </Button>
+                      </Box>
+                    </Box>
+                  </Modal>
                   {err == true && (
                     <Grid xs={12} sm={15}>
                       <Alert
@@ -329,184 +450,10 @@ export default function YoyakuListToday() {
                   )}
                 </Grid>
               </Media>
-              {/* モーダル　予約内容詳細 */}
-              <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <Stack spacing={2} sx={{ width: "100%", my: 3, mx: "auto" }}>
-                    <SnackbarContent
-                      sx={{
-                        bgcolor: blue[400],
-                        justifyContent: "center",
-                        boxShadow: "none",
-                        fontWeight: 600,
-                      }}
-                      message={"予約詳細"}
-                    />
-                  </Stack>
-                  <Item sx={{ my: 2 }}>
-                    <Box display="flex">
-                      <Typography
-                        variant="h5"
-                        component="div"
-                        color="black"
-                        textAlign="center"
-                        mx="auto"
-                        fontSize={19}
-                        width={90}
-                        fontWeight={500}
-                      >
-                        予約情報
-                      </Typography>
-                    </Box>
-                  </Item>
-                  <Item2 sx={{ my: 2 }}>
-                    <Box display="flex">
-                      <Typography
-                        variant="h5"
-                        component="div"
-                        ml={1}
-                        color="black"
-                        textAlign="left"
-                        fontSize={17}
-                        width={90}
-                        fontWeight={400}
-                      >
-                        予約日時
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        component="div"
-                        ml={5}
-                        color={grey[600]}
-                        textAlign="left"
-                        fontSize={17}
-                      >
-                        {rsvDate}
-                      </Typography>
-                    </Box>
-                  </Item2>
-                  <Item sx={{ my: 2 }}>
-                    <Box display="flex">
-                      <Typography
-                        variant="h5"
-                        component="div"
-                        ml={1}
-                        color="black"
-                        textAlign="left"
-                        fontSize={17}
-                        width={90}
-                        fontWeight={400}
-                      >
-                        担当者
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        component="div"
-                        ml={5}
-                        color={grey[600]}
-                        textAlign="left"
-                        fontSize={17}
-                      >
-                        {teacher}
-                      </Typography>
-                    </Box>
-                  </Item>
-                  <Item2 sx={{ my: 2 }}>
-                    <Box display="flex">
-                      <Typography
-                        variant="h5"
-                        component="div"
-                        ml={1}
-                        color="black"
-                        textAlign="left"
-                        fontSize={17}
-                        width={90}
-                        fontWeight={400}
-                      >
-                        お客様名
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        component="div"
-                        ml={5}
-                        color={grey[600]}
-                        textAlign="left"
-                        fontSize={17}
-                      >
-                        {student}
-                      </Typography>
-                    </Box>
-                  </Item2>
-                  <Item sx={{ my: 2 }}>
-                    <Box display="flex">
-                      <Typography
-                        variant="h5"
-                        component="div"
-                        ml={1}
-                        color="black"
-                        textAlign="left"
-                        fontSize={17}
-                        width={90}
-                        fontWeight={400}
-                      >
-                        予約状態
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        component="div"
-                        ml={5}
-                        color={grey[600]}
-                        textAlign="left"
-                        fontSize={17}
-                      >
-                        確定
-                      </Typography>
-                    </Box>
-                  </Item>
-                  <Box display="flex" justifyContent="right">
-                    <Button
-                      variant="contained"
-                      sx={{
-                        mt: 1,
-                        mb: 2,
-                        mr: 1,
-                        bgcolor: teal[400],
-                        color: "white",
-                        "&:hover": { bgcolor: teal[500] },
-                      }}
-                      onClick={(e) => deleteRsv(e)}
-                    >
-                      予約キャンセル
-                    </Button>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        mt: 1,
-                        mb: 2,
-                        mr: 1,
-                        bgcolor: grey[500],
-                        color: "white",
-                        "&:hover": { bgcolor: grey[600] },
-                      }}
-                      onClick={() => {
-                        handleClose();
-                      }}
-                    >
-                      閉じる
-                    </Button>
-                  </Box>
-                </Box>
-              </Modal>
             </Box>
           </CardContent>
         </Box>
       </MediaContextProvider>
-      <ToastContainer />
     </React.Fragment>
   );
 }

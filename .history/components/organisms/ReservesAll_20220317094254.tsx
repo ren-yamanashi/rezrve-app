@@ -227,6 +227,7 @@ export default function ReservesAll() {
         where("reserved", "==", true),
         where("date", ">=", timestamp(xxx)),
         where("date", "<=", timestamp(xxx7)),
+        where("student", "==", sortStudent),
         orderBy("date", "asc"),
         orderBy("time", "asc")
       );
@@ -446,10 +447,10 @@ export default function ReservesAll() {
               </TableCell>
               <TableCell>
                 {`${rsv.time}:00`}
-                <Tooltip title="詳細確認・キャンセル" arrow>
+                <Tooltip title="キャンセル・変更" arrow>
                   <IconButton
                     onClick={() => {
-                      handleOpen2();
+                      handleOpen();
                       setRsvId(rsv.id);
                       setStudent(rsv.student);
                       setTeacher(rsv.teacher);

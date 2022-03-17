@@ -5,27 +5,15 @@ import {
   query,
   where,
   getDocs,
-  Timestamp,
   updateDoc,
   doc,
 } from "firebase/firestore";
 import { browser } from "process";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import dayjs from "dayjs";
-import Grid from "@mui/material/Grid";
-import Table from "@mui/material/Table";
-import Tooltip from "@mui/material/Tooltip";
-import EditIcon from "@mui/icons-material/Edit";
-import IconButton from "@mui/material/IconButton";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import CardContent from "@mui/material/CardContent";
-import Alert from "@mui/material/Alert";
+import React, { useState, useEffect } from "react";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import Box from "@mui/material/Box";
-import { createMedia } from "@artsy/fresnel";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -35,21 +23,12 @@ import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-//内部インポート
-import { useAuth } from "../../../hooks/useUserAuth";
-import { FreeList } from "../../../models/FreeList";
-import Title from "../../atoms/Title";
+import dayjs from "dayjs";
 import { blue, grey, teal } from "@mui/material/colors";
-
-//MediaQuery設定
-const { MediaContextProvider, Media } = createMedia({
-  breakpoints: {
-    sm: 0,
-    md: 600,
-    lg: 1000,
-    xl: 1220,
-  },
-});
+//内部インポート
+import { FreeList } from "../../../models/FreeList";
+import { useAuth } from "../../../hooks/useUserAuth";
+import { useRouter } from "next/router";
 //Itemのスタイル
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -76,13 +55,11 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-//今日の予約一覧ページ　シフト提出者IDとユーザーIDが一致するもののみ表示
-export default function YoyakuListToday() {
+moment.locale("ja");
+
+export default function CalendarAll() {
   const db = getFirestore();
-  const [reserves, setReserves] = useState<FreeList[]>([]);
-  const { user } = useAuth();
-  const router = useRouter();
-  const [err, setErr] = useState<boolean>(false);
+  const [freeLists, setFreeLists] = useState<FreeList[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [rsvDate, setRsvDate] = useState("");
   const [teacher, setTeacher] = useState("");
@@ -90,15 +67,16 @@ export default function YoyakuListToday() {
   const [rsvId, setRsvId] = useState("");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  //日付をTimeStamp型にして返す
-  const timestamp = (datetimeStr: any) => {
-    return Timestamp.fromDate(new Date(datetimeStr));
+  const { user } = useAuth();
+  const localizer = momentLocalizer(moment);
+  const router = useRouter();
+  const formats = {
+    dateFormat: "D",
+    dayFormat: "D(ddd)",
+    monthHeaderFormat: "YYYY/MM",
+    dayHeaderFormat: "MM/DD(ddd)",
+    dayRangeHeaderFormat: "YYYY/MM",
   };
-  const day = new Date();
-  const y = day.getFullYear();
-  const m = day.getMonth();
-  const d = day.getDate();
-  let xxx = new Date(y, m, d, 12, 0, 0);
   useEffect(() => {
     if (!process.browser) {
       return;
@@ -106,30 +84,35 @@ export default function YoyakuListToday() {
     if (user === null) {
       return;
     }
-    /**========
-     * Firebaseからシフトを取得
-     *========*/
-    async function loadReserves() {
+    async function loadFree() {
       const q = query(
         collection(db, "FreeSpace"),
-        where("date", "==", timestamp(xxx)),
         where("reserved", "==", true),
-        orderBy("time", "asc")
+        orderBy("time")
       );
       const snapshot = await getDocs(q);
-      if (snapshot.empty) {
-        setErr(true);
-      }
-      //ReserveList一覧の展開
-      const gotReserves = snapshot.docs.map((doc) => {
-        const reserve = doc.data() as FreeList;
-        reserve.id = doc.id;
-        return reserve;
+      //FreeList一覧の展開
+      const gotFreeList = snapshot.docs.map((doc) => {
+        const free = doc.data() as FreeList;
+        free.id = doc.id;
+        return free;
       });
-      setReserves(gotReserves);
+      setFreeLists(gotFreeList);
     }
-    loadReserves();
+    loadFree();
   }, [process, browser, user]);
+  const setEvent = freeLists.map((e) => {
+    return {
+      id: e.id,
+      title: `${e.time}:00~ ${e.teacher} ${e.student}`,
+      start: new Date(e.date.toDate().setHours(e.time)), //これだとできる
+      // start:new Date (e.date), //これだとエラーになる ※dateはタイムスタンプ型
+      end: new Date(e.date.toDate().setHours(e.time + 1)),
+      teacher: e.teacher,
+      student: e.student,
+      date: `${dayjs(e.date.toDate()).format("YYYY/MM/DD ")} ${e.time}:00~`,
+    };
+  });
   /**=======
    * キャンセル処理
    *======*/
@@ -151,96 +134,41 @@ export default function YoyakuListToday() {
       });
       const q = query(
         collection(db, "FreeSpace"),
-        where("date", "==", timestamp(xxx)),
         where("reserved", "==", true),
-        orderBy("time", "asc")
+        orderBy("time")
       );
       const snapshot = await getDocs(q);
-      if (snapshot.empty) {
-        setErr(true);
-      }
-      //ReserveList一覧の展開
-      const gotReserves = snapshot.docs.map((doc) => {
-        const reserve = doc.data() as FreeList;
-        reserve.id = doc.id;
-        return reserve;
+      //FreeList一覧の展開
+      const gotFreeList = snapshot.docs.map((doc) => {
+        const free = doc.data() as FreeList;
+        free.id = doc.id;
+        return free;
       });
-      setReserves(gotReserves);
+      setFreeLists(gotFreeList);
     });
   };
   return (
-    <React.Fragment>
-      <Box>
-        <CardContent
-          style={{
-            width: "95%",
-            borderRadius: "7px",
-            borderStyle: "solid",
-            borderWidth: "2px",
-            borderColor: "#4689FF",
-            margin: "auto",
-          }}
-        >
-          <Box>
-            <Box display="flex" mb={3} ml={3}>
-              <Title>本日のレッスン</Title>
-            </Box>
-            <Grid item sm={20}>
-              <Table size="small">
-                <TableHead style={{ backgroundColor: "#FFFFDD" }}>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 600 }}>講師名</TableCell>
-                    <TableCell style={{ fontWeight: 600 }}>生徒名</TableCell>
-                    <TableCell style={{ fontWeight: 600 }}>予約日時</TableCell>
-                    <TableCell style={{ fontWeight: 600 }}>時間</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {reserves.map((rsv) => (
-                    <TableRow key={rsv.id}>
-                      <TableCell>{rsv.teacher}</TableCell>
-                      <TableCell>{rsv.student}</TableCell>
-                      <TableCell>
-                        {dayjs(rsv.date.toDate()).format("YYYY/MM/DD ")}
-                      </TableCell>
-                      <TableCell>
-                        {`${rsv.time}:00`}
-                        <Tooltip title="詳細確認・キャンセル" arrow>
-                          <IconButton
-                            onClick={() => {
-                              handleOpen();
-                              setRsvId(rsv.id);
-                              setStudent(rsv.student);
-                              setTeacher(rsv.teacher);
-                              setRsvDate(
-                                `${dayjs(rsv.date.toDate()).format(
-                                  "YYYY/MM/DD "
-                                )} ${rsv.time}:00~`
-                              );
-                            }}
-                          >
-                            <EditIcon sx={{ color: "teal", ml: 3 }} />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              {err == true && (
-                <Grid xs={12} sm={15}>
-                  <Alert
-                    variant="filled"
-                    severity="info"
-                    sx={{ m: 3, textAlign: "center" }}
-                  >
-                    本日のレッスンはありません
-                  </Alert>
-                </Grid>
-              )}
-            </Grid>
-          </Box>
-        </CardContent>
+    <>
+      <React.Fragment>
+        <Box mb={3} mx="auto" mt={5}>
+          <Calendar
+            views={["month"]}
+            selectable
+            localizer={localizer}
+            defaultDate={new Date()}
+            defaultView="month"
+            events={setEvent}
+            style={{ height: "120vh" }}
+            onSelectEvent={(event) => {
+              handleOpen();
+              setTeacher(event.teacher);
+              setStudent(event.student);
+              setRsvDate(event.date);
+              setRsvId(event.id);
+            }}
+            formats={formats}
+          />
+        </Box>
         {/* モーダル　予約内容詳細 */}
         <Modal
           open={open}
@@ -414,8 +342,7 @@ export default function YoyakuListToday() {
             </Box>
           </Box>
         </Modal>
-      </Box>
-      <ToastContainer />
-    </React.Fragment>
+      </React.Fragment>
+    </>
   );
 }

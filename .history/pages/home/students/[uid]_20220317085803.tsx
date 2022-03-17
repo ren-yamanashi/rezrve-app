@@ -67,7 +67,7 @@ export default function HomePage() {
         </Media>
         <Media at="sm">
           <Header />
-          <Box mb={1}>
+          <Box my={1}>
             <YoyakuListToday />
           </Box>
           <Box my={3}>

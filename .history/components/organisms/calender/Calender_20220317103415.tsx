@@ -122,9 +122,6 @@ export default function Calendar1() {
       start: new Date(e.date.toDate().setHours(e.time)), //これだとできる
       // start:new Date (e.date), //これだとエラーになる ※dateはタイムスタンプ型
       end: new Date(e.date.toDate().setHours(e.time + 1)),
-      teacher: e.teacher,
-      student: e.student,
-      date: `${dayjs(e.date.toDate()).format("YYYY/MM/DD ")} ${e.time}:00~`,
     };
   });
   /**==========
@@ -137,9 +134,6 @@ export default function Calendar1() {
       start: new Date(e.date.toDate().setHours(e.time)), //これだとできる
       // start:new Date (e.date), //これだとエラーになる ※dateはタイムスタンプ型
       end: new Date(e.date.toDate().setHours(e.time + 1)),
-      teacher: e.teacher,
-      student: e.student,
-      date: `${dayjs(e.date.toDate()).format("YYYY/MM/DD ")} ${e.time}:00~`,
     };
   });
   /**=======
@@ -163,7 +157,6 @@ export default function Calendar1() {
       });
       const q = query(
         collection(db, "FreeSpace"),
-        where("senderUid", "==", user.uid),
         where("reserved", "==", true),
         orderBy("time")
       );
@@ -227,180 +220,6 @@ export default function Calendar1() {
               </Box>
             </Box>
           </Media>
-          {/* モーダル　予約内容詳細 */}
-          <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Stack spacing={2} sx={{ width: "100%", my: 3, mx: "auto" }}>
-                <SnackbarContent
-                  sx={{
-                    bgcolor: blue[400],
-                    justifyContent: "center",
-                    boxShadow: "none",
-                    fontWeight: 600,
-                  }}
-                  message={"予約詳細"}
-                />
-              </Stack>
-              <Item sx={{ my: 2 }}>
-                <Box display="flex">
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    color="black"
-                    textAlign="center"
-                    mx="auto"
-                    fontSize={19}
-                    width={90}
-                    fontWeight={500}
-                  >
-                    予約情報
-                  </Typography>
-                </Box>
-              </Item>
-              <Item2 sx={{ my: 2 }}>
-                <Box display="flex">
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    ml={1}
-                    color="black"
-                    textAlign="left"
-                    fontSize={17}
-                    width={90}
-                    fontWeight={400}
-                  >
-                    予約日時
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    ml={5}
-                    color={grey[600]}
-                    textAlign="left"
-                    fontSize={17}
-                  >
-                    {rsvDate}
-                  </Typography>
-                </Box>
-              </Item2>
-              <Item sx={{ my: 2 }}>
-                <Box display="flex">
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    ml={1}
-                    color="black"
-                    textAlign="left"
-                    fontSize={17}
-                    width={90}
-                    fontWeight={400}
-                  >
-                    担当者
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    ml={5}
-                    color={grey[600]}
-                    textAlign="left"
-                    fontSize={17}
-                  >
-                    {teacher}
-                  </Typography>
-                </Box>
-              </Item>
-              <Item2 sx={{ my: 2 }}>
-                <Box display="flex">
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    ml={1}
-                    color="black"
-                    textAlign="left"
-                    fontSize={17}
-                    width={90}
-                    fontWeight={400}
-                  >
-                    お客様名
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    ml={5}
-                    color={grey[600]}
-                    textAlign="left"
-                    fontSize={17}
-                  >
-                    {student}
-                  </Typography>
-                </Box>
-              </Item2>
-              <Item sx={{ my: 2 }}>
-                <Box display="flex">
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    ml={1}
-                    color="black"
-                    textAlign="left"
-                    fontSize={17}
-                    width={90}
-                    fontWeight={400}
-                  >
-                    予約状態
-                  </Typography>
-                  <Typography
-                    variant="h5"
-                    component="div"
-                    ml={5}
-                    color={grey[600]}
-                    textAlign="left"
-                    fontSize={17}
-                  >
-                    確定
-                  </Typography>
-                </Box>
-              </Item>
-              <Box display="flex" justifyContent="right">
-                <Button
-                  variant="contained"
-                  sx={{
-                    mt: 1,
-                    mb: 2,
-                    mr: 1,
-                    bgcolor: teal[400],
-                    color: "white",
-                    "&:hover": { bgcolor: teal[500] },
-                  }}
-                  onClick={(e) => deleteRsv(e)}
-                >
-                  予約キャンセル
-                </Button>
-                <Button
-                  variant="contained"
-                  sx={{
-                    mt: 1,
-                    mb: 2,
-                    mr: 1,
-                    bgcolor: grey[500],
-                    color: "white",
-                    "&:hover": { bgcolor: grey[600] },
-                  }}
-                  onClick={() => {
-                    handleClose();
-                  }}
-                >
-                  閉じる
-                </Button>
-              </Box>
-            </Box>
-          </Modal>
-          <ToastContainer />
         </React.Fragment>
       </MediaContextProvider>
     </>

@@ -185,7 +185,7 @@ export default function EditReserve() {
                               予約者名
                             </Typography>
                           </Grid>
-                          <Grid item xs={10} md={20} textAlign="left">
+                          <Grid item xs={10} md={20}>
                             <Typography variant="h5" component="div">
                               {reserves.student}
                             </Typography>

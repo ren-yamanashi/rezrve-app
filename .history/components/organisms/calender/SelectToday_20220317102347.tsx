@@ -20,6 +20,7 @@ import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import RectangleIcon from "@mui/icons-material/Rectangle";
 import DatePicker from "@mui/lab/DatePicker";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
@@ -42,18 +43,20 @@ import Stack from "@mui/material/Stack";
 import SnackbarContent from "@mui/material/SnackbarContent";
 import { ToastContainer, toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
+import "moment/locale/ja"; // 日本語ローカライズ
+import "react-dates/initialize";
+import "react-dates/lib/css/_datepicker.css";
 import { useRouter } from "next/router";
 import { browser } from "process";
 import { blue, grey, teal } from "@mui/material/colors";
 import Paper from "@mui/material/Paper";
 import { ja } from "date-fns/locale";
-import "moment/locale/ja"; // 日本語ローカライズ
-import "react-dates/initialize";
-import "react-dates/lib/css/_datepicker.css";
 //内部インポート
+import Title from "../../atoms/Title";
 import { useAuth } from "../../../hooks/useUserAuth";
 import { FreeList } from "../../../models/FreeList";
 import { Users } from "../../../models/Users";
+
 //メディアクエリ設定
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
@@ -120,7 +123,7 @@ export default function SelectDayAll() {
   const [open, setOpen] = useState(false); //シフト登録モーダル用
   const [open2, setOpen2] = useState(false); //予約確認モーダル用
   const [open3, setOpen3] = useState<boolean>(false); //生徒検索モーダル用
-  const [open4, setOpen4] = useState<boolean>(false); //生徒検索モーダル用
+  const [open4, setOpen4] = useState<boolean>(false); //予約詳細確認
   const handleOpen2 = () => setOpen2(true);
   const handleClose2 = () => setOpen2(false);
   const handleOpen3 = () => setOpen3(true);
@@ -403,7 +406,7 @@ export default function SelectDayAll() {
     const q = query(
       collection(db, "FreeSpace"),
       where("senderUid", "==", user.uid),
-      where("date", "==", timestamp(xxx))
+      where("date", "==", timestamp(xxx2))
     );
     const snapshot = await getDocs(q);
     //FreeList一覧の展開
@@ -504,7 +507,7 @@ export default function SelectDayAll() {
     const q = query(
       collection(db, "FreeSpace"),
       where("senderUid", "==", user.uid),
-      where("date", "==", timestamp(xxx)),
+      where("date", "==", timestamp(xxx2)),
       where("time", "==", 14)
     );
     const snapshot = await getDocs(q);
@@ -639,14 +642,6 @@ export default function SelectDayAll() {
         loadRsv16();
         loadRsv17();
         loadRsv18();
-        toast.success("シフトを登録しました", {
-          position: "bottom-left",
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
       });
     } else {
       setErr(true);
@@ -732,6 +727,9 @@ export default function SelectDayAll() {
     <>
       <React.Fragment>
         <MediaContextProvider>
+          <Box>
+            <Title>予約スケジュール</Title>
+          </Box>
           <Box
             ml={3}
             display="flex"
@@ -999,11 +997,6 @@ export default function SelectDayAll() {
           <Table size="small" sx={{ my: 3 }}>
             <TableHead style={{ backgroundColor: "#FFFFDD" }}>
               <TableRow>
-                <Media greaterThan="sm">
-                  <TableCell style={{ fontWeight: 600, width: "15%" }}>
-                    講師名
-                  </TableCell>
-                </Media>
                 <TableCell style={{ fontWeight: 600 }}>10:00</TableCell>
                 <TableCell style={{ fontWeight: 600 }}>11:00</TableCell>
                 <TableCell style={{ fontWeight: 600 }}>12:00</TableCell>
@@ -1017,13 +1010,6 @@ export default function SelectDayAll() {
             </TableHead>
             <TableBody>
               <TableRow key={freeLists.length}>
-                <Media greaterThan="sm">
-                  <TableCell
-                    style={{ fontWeight: 600, height: 50, width: "15%" }}
-                  >
-                    <Box sx={{ textAlign: "center", mt: 1.2 }}>{test}</Box>
-                  </TableCell>
-                </Media>
                 {/* シフトがない場合はエラーを返している　→ エラーだったらシフトを申請できる */}
                 {e10 == true && (
                   <Tooltip title="シフトを申請" arrow>
@@ -1154,17 +1140,7 @@ export default function SelectDayAll() {
                           borderWidth: "1px",
                           height: 50,
                         }}
-                        onClick={() => {
-                          handleOpen4();
-                          setRsvNum(value.id);
-                          setRsvDate(
-                            `${dayjs(value.date.toDate()).format(
-                              "YYYY/MM/DD "
-                            )} ${value.time}:00~`
-                          );
-                          setStudent2(value.student);
-                          setTeacher(value.teacher);
-                        }}
+                        onClick={() => router.push(`/reserve/edit/${value.id}`)}
                       />
                     </Tooltip>
                   ) : (
@@ -1242,17 +1218,7 @@ export default function SelectDayAll() {
                           borderWidth: "1px",
                           height: 50,
                         }}
-                        onClick={() => {
-                          handleOpen4();
-                          setRsvNum(value.id);
-                          setRsvDate(
-                            `${dayjs(value.date.toDate()).format(
-                              "YYYY/MM/DD "
-                            )} ${value.time}:00~`
-                          );
-                          setStudent2(value.student);
-                          setTeacher(value.teacher);
-                        }}
+                        onClick={() => router.push(`/reserve/edit/${value.id}`)}
                       />
                     </Tooltip>
                   ) : (
@@ -1330,17 +1296,7 @@ export default function SelectDayAll() {
                           borderWidth: "1px",
                           height: 50,
                         }}
-                        onClick={() => {
-                          handleOpen4();
-                          setRsvNum(value.id);
-                          setRsvDate(
-                            `${dayjs(value.date.toDate()).format(
-                              "YYYY/MM/DD "
-                            )} ${value.time}:00~`
-                          );
-                          setStudent2(value.student);
-                          setTeacher(value.teacher);
-                        }}
+                        onClick={() => router.push(`/reserve/edit/${value.id}`)}
                       />
                     </Tooltip>
                   ) : (
@@ -1418,17 +1374,7 @@ export default function SelectDayAll() {
                           borderWidth: "1px",
                           height: 50,
                         }}
-                        onClick={() => {
-                          handleOpen4();
-                          setRsvNum(value.id);
-                          setRsvDate(
-                            `${dayjs(value.date.toDate()).format(
-                              "YYYY/MM/DD "
-                            )} ${value.time}:00~`
-                          );
-                          setStudent2(value.student);
-                          setTeacher(value.teacher);
-                        }}
+                        onClick={() => router.push(`/reserve/edit/${value.id}`)}
                       />
                     </Tooltip>
                   ) : (
@@ -1506,17 +1452,7 @@ export default function SelectDayAll() {
                           borderWidth: "1px",
                           height: 50,
                         }}
-                        onClick={() => {
-                          handleOpen4();
-                          setRsvNum(value.id);
-                          setRsvDate(
-                            `${dayjs(value.date.toDate()).format(
-                              "YYYY/MM/DD "
-                            )} ${value.time}:00~`
-                          );
-                          setStudent2(value.student);
-                          setTeacher(value.teacher);
-                        }}
+                        onClick={() => router.push(`/reserve/edit/${value.id}`)}
                       />
                     </Tooltip>
                   ) : (
@@ -1594,17 +1530,7 @@ export default function SelectDayAll() {
                           borderWidth: "1px",
                           height: 50,
                         }}
-                        onClick={() => {
-                          handleOpen4();
-                          setRsvNum(value.id);
-                          setRsvDate(
-                            `${dayjs(value.date.toDate()).format(
-                              "YYYY/MM/DD "
-                            )} ${value.time}:00~`
-                          );
-                          setStudent2(value.student);
-                          setTeacher(value.teacher);
-                        }}
+                        onClick={() => router.push(`/reserve/edit/${value.id}`)}
                       />
                     </Tooltip>
                   ) : (
@@ -1642,6 +1568,7 @@ export default function SelectDayAll() {
                     </Tooltip>
                   )
                 )}
+
                 {e17 == true && (
                   <Tooltip title="シフトを申請" arrow>
                     <TableCell
@@ -1682,17 +1609,7 @@ export default function SelectDayAll() {
                           borderWidth: "1px",
                           height: 50,
                         }}
-                        onClick={() => {
-                          handleOpen4();
-                          setRsvNum(value.id);
-                          setRsvDate(
-                            `${dayjs(value.date.toDate()).format(
-                              "YYYY/MM/DD "
-                            )} ${value.time}:00~`
-                          );
-                          setStudent2(value.student);
-                          setTeacher(value.teacher);
-                        }}
+                        onClick={() => router.push(`/reserve/edit/${value.id}`)}
                       />
                     </Tooltip>
                   ) : (
@@ -1770,17 +1687,7 @@ export default function SelectDayAll() {
                           borderWidth: "1px",
                           height: 50,
                         }}
-                        onClick={() => {
-                          handleOpen4();
-                          setRsvNum(value.id);
-                          setRsvDate(
-                            `${dayjs(value.date.toDate()).format(
-                              "YYYY/MM/DD "
-                            )} ${value.time}:00~`
-                          );
-                          setStudent2(value.student);
-                          setTeacher(value.teacher);
-                        }}
+                        onClick={() => router.push(`/reserve/edit/${value.id}`)}
                       />
                     </Tooltip>
                   ) : (

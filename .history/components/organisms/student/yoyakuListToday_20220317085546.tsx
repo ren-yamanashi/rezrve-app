@@ -143,7 +143,6 @@ export default function YoyakuListToday() {
       student: "",
       reserverUid: "",
     }).then(async () => {
-      handleClose();
       toast.success("キャンセルしました", {
         position: "bottom-left",
         hideProgressBar: false,
