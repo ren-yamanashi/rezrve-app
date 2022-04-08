@@ -6,12 +6,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 
-import Header2 from "../../../components/templates/Header3";
-import { ToastContainer } from "react-toastify";
 import { useSignUp } from "../../../hooks/user/useUserList";
+import Header2 from "../../../components/templates/Header3";
 import Already from "../../../components/templates/Sign/AlreadyUser";
 import SignIn from "../../../components/templates/Sign/Sign_in";
 import SignInButton from "../../../components/templates/Sign/SignInButton";
+import { ToastContainer } from "react-toastify";
 
 const SignUpPage: FC = () => {
   const theme = createTheme();
@@ -38,7 +38,7 @@ const SignUpPage: FC = () => {
               component="form"
               noValidate
               onSubmit={(event) =>
-                loadSingUp(event, email, password, "/user/login/teacher/")
+                loadSingUp(event, email, password, "/user/login/manager/")
               }
               sx={{ mt: 1 }}
             >

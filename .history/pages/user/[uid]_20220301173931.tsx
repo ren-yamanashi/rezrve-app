@@ -5,7 +5,6 @@ import Title from "../../components/atoms/Title";
 import { createMedia } from "@artsy/fresnel";
 import { Box } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
-import { ToastContainer } from "react-toastify";
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
     sm: 0,
@@ -49,7 +48,6 @@ export default function SpacePage() {
           </Box>
         </Media>
       </MediaContextProvider>
-      <ToastContainer />
     </>
   );
 }
