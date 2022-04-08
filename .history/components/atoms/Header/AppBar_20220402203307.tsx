@@ -1,0 +1,22 @@
+import * as React from "react";
+import Box from "@mui/material/Box";
+import AppBar from "@mui/material/AppBar";
+interface AppBarProps {
+  children?: React.ReactNode;
+}
+const drawerWidth = 210;
+
+export default function AppBarComponent(props: AppBarProps) {
+  return (
+    <AppBar
+      position="fixed"
+      sx={{
+        width: { sm: `calc(100% - ${drawerWidth}px)` },
+        ml: { sm: `${drawerWidth}px` },
+        bgcolor: "#FFFFFE",
+      }}
+    >
+      {props.children}
+    </AppBar>
+  );
+}
