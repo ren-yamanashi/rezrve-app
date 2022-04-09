@@ -78,15 +78,22 @@ export function useFreeSpace_Today() {
 			showErrorMessage("読み取りに失敗しました")
 		}
 	}
+	useEffect(() => {
+		if (!process.browser) {
+		  return;
+		}
+		if (user === null) {
+		  return;
+		}
+		loadFreeSpace();
+	  }, [process.browser, user]);
 	return {freeSpaces,err,setErr,loadFreeSpace}
 }
 /**==== newValue ======*/
 export function useFreeSpace_newValue() {
 	const {baseQuery,baseLoading,freeSpaces} = useFreeSpace();
 	const {showErrorMessage} = useAlert()
-	const {user} = useAuth();
-	const {newDateTime} = useDate()
-	const [err,setErr] = useRecoilState(errState)
+	const {err,setErr} = useFreeSpace_Today()
 	async function loadFreeSpace_newValue(date) {
 		setErr(false);
 		try {
@@ -125,15 +132,6 @@ export function useFreeSpace_newValue() {
 			showErrorMessage("読み取りに失敗しました")
 		}
 	}
-	useEffect(() => {
-		if (!process.browser) {
-		  return;
-		}
-		if (user === null) {
-		  return;
-		}
-		loadFreeSpace_newValue(newDateTime);
-	  }, [process.browser, user]);
 	return {freeSpaces,err,loadFreeSpace_newValue,deleteShift}
 }
 /**===== select Teacher =======*/

@@ -234,9 +234,7 @@ export default function Header() {
                   ) : (
                     item.role == "teacher" && (
                       <ShiftButton_Blue
-                        addShift={() =>
-                          router.push(`/shift/create/${user.uid}`)
-                        }
+                        addShift={() => router.push(`/user/edit/${user.uid}`)}
                         seeShift={() => router.push(`/shift/list/${user?.uid}`)}
                       />
                     )
@@ -248,7 +246,7 @@ export default function Header() {
                     <RsvButton goLink={`/reserve/manager/${user.uid}`} />
                   ) : (
                     item.role == "teacher" && (
-                      <RsvButton goLink={`/reserve/teacher/${user.uid}`} />
+                      <RsvButton goLink={`/reserve/${user.uid}`} />
                     )
                   )
                 )}

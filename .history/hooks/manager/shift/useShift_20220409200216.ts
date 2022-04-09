@@ -56,30 +56,6 @@ export function useFreeSpace() {
 	return {baseQuery,baseLoading,freeSpaces}
 }
 /**====== today ==========*/
-export function useFreeSpace_Today() {
-	const {baseQuery,baseLoading,freeSpaces} = useFreeSpace();
-	const {showErrorMessage} = useAlert()
-	const [err,setErr] = useRecoilState(errState)
-	const {newDateTime} = useDate()
-	const {user} = useAuth();
-	async function loadFreeSpace() {
-		setErr(false);
-		try {
-			const snapshot = await getDocs(query(
-				baseQuery(),
-				where("date","==",timestamp(newDateTime)),
-				orderBy("time", "asc")))
-			if (snapshot.empty) {
-				setErr(true);
-			}
-			baseLoading(snapshot)
-		} catch (error) {
-			console.error(error);
-			showErrorMessage("読み取りに失敗しました")
-		}
-	}
-	return {freeSpaces,err,setErr,loadFreeSpace}
-}
 /**==== newValue ======*/
 export function useFreeSpace_newValue() {
 	const {baseQuery,baseLoading,freeSpaces} = useFreeSpace();
@@ -134,13 +110,13 @@ export function useFreeSpace_newValue() {
 		}
 		loadFreeSpace_newValue(newDateTime);
 	  }, [process.browser, user]);
-	return {freeSpaces,err,loadFreeSpace_newValue,deleteShift}
+	return {freeSpaces,err,setErr,loadFreeSpace_newValue,deleteShift}
 }
 /**===== select Teacher =======*/
 export function useSelectTeacher() {
 	const {baseLoading,baseQuery,freeSpaces} = useFreeSpace();
 	const {showErrorMessage} = useAlert()
-	const {err,setErr} = useFreeSpace_Today()
+	const {err,setErr} = useFreeSpace_newValue()
 	async function loadSelectTeacher(teacher,date) {
 		setErr(false);
 		try {

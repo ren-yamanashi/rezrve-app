@@ -248,7 +248,7 @@ export default function Header() {
                     <RsvButton goLink={`/reserve/manager/${user.uid}`} />
                   ) : (
                     item.role == "teacher" && (
-                      <RsvButton goLink={`/reserve/teacher/${user.uid}`} />
+                      <RsvButton goLink={`/reserve/${user.uid}`} />
                     )
                   )
                 )}

@@ -86,7 +86,7 @@ export function useFreeSpace_newValue() {
 	const {showErrorMessage} = useAlert()
 	const {user} = useAuth();
 	const {newDateTime} = useDate()
-	const [err,setErr] = useRecoilState(errState)
+	const {err,setErr} = useFreeSpace_Today()
 	async function loadFreeSpace_newValue(date) {
 		setErr(false);
 		try {

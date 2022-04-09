@@ -59,7 +59,7 @@ export function useFreeSpace() {
 export function useFreeSpace_Today() {
 	const {baseQuery,baseLoading,freeSpaces} = useFreeSpace();
 	const {showErrorMessage} = useAlert()
-	const [err,setErr] = useRecoilState(errState)
+	
 	const {newDateTime} = useDate()
 	const {user} = useAuth();
 	async function loadFreeSpace() {

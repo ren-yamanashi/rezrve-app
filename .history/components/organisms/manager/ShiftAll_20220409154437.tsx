@@ -12,7 +12,10 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Box from "@mui/material/Box";
 // import my File
-import { useFreeSpace_newValue } from "../../../hooks/manager/shift/useShift";
+import {
+  useFreeSpace_Today,
+  useFreeSpace_newValue,
+} from "../../../hooks/manager/shift/useShift";
 import { useTeacherList } from "../../../hooks/user/useUserList";
 import Title from "../../atoms/Text/PrimaryTitle";
 import { teal } from "@mui/material/colors";
@@ -26,8 +29,8 @@ export default function ShiftsAll() {
   console.log("シフト一覧　（管理者）");
   const { changeDateValue, dateValue, newDateTime } = useDate();
   const { handleOpen7 } = useHandle();
-  const { freeSpaces, loadFreeSpace_newValue, deleteShift, err } =
-    useFreeSpace_newValue();
+  const { freeSpaces, loadFreeSpace, err } = useFreeSpace_Today();
+  const { loadFreeSpace_newValue, deleteShift } = useFreeSpace_newValue();
   const { usersList } = useTeacherList();
   return (
     <React.Fragment>
@@ -56,9 +59,7 @@ export default function ShiftsAll() {
                   <IconButton onClick={handleOpen7}>
                     <FilterListIcon />
                   </IconButton>
-                  <IconButton
-                    onClick={() => loadFreeSpace_newValue(newDateTime)}
-                  >
+                  <IconButton onClick={loadFreeSpace}>
                     <RestartAltIcon />
                   </IconButton>
                   <SelectTeacherModal users={usersList && usersList} />
