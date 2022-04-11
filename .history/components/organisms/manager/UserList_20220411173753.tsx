@@ -54,9 +54,10 @@ export default function UsersList() {
                           borderWidth: "2px",
                           margin: "auto",
                           height: 250,
+                          width: "100%",
                         }}
                       >
-                        <Grid item xs={6} sm={8} lg={3} md={8}>
+                        <Grid item xs={6} sm={8} lg={6} md={8}>
                           <Box
                             sx={{
                               justifyContent: "center",

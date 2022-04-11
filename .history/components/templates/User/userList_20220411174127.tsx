@@ -28,7 +28,8 @@ export default function SpacePage() {
         </Media>
         <Media at="md">
           <HeaderAtMd />
-          <Box m={3}>
+
+          <Box m={5}>
             <UsersList />
           </Box>
         </Media>
