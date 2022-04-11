@@ -1,9 +1,11 @@
-import ShiftsAll from "../../../organisms/manager/ShiftAll";
-import Header from "../../../templates/Header/HeaderNext";
-import HeaderAtMd from "../../../../components/templates/Header/Header";
-import { Box } from "@mui/material";
+import UsersList from "../../../components/organisms/manager/UserList";
+import Header from "../../../components/templates/Header/HeaderNext";
+import HeaderAtMd from "../../../components/templates/Header/Header";
+import Title from "../../../components/atoms/Text/PrimaryTitle";
 import { createMedia } from "@artsy/fresnel";
-import Title from "../../../../components/atoms/Text/PrimaryTitle";
+import { Box } from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import CardComponent from "../../../components/atoms/Card/CardComponent";
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
     sm: 0,
@@ -13,22 +15,24 @@ const { MediaContextProvider, Media } = createMedia({
   },
 });
 
-export default function ShiftList_Manager() {
+export default function SpacePage() {
   return (
     <>
       <MediaContextProvider>
         <Media greaterThan="md">
           <Header>
             <Box mt={10}>
-              <ShiftsAll />
+              <UsersList />
             </Box>
           </Header>
         </Media>
         <Media at="md">
           <HeaderAtMd />
-          <Box mt={3}>
-            <ShiftsAll />
-          </Box>
+          <CardComponent>
+            <Box>
+              <UsersList />
+            </Box>
+          </CardComponent>
         </Media>
         <Media at="sm">
           <Box mt={5} ml={2} mr={2} display="flex">
@@ -36,6 +40,7 @@ export default function ShiftList_Manager() {
           </Box>
         </Media>
       </MediaContextProvider>
+      <ToastContainer />
     </>
   );
 }

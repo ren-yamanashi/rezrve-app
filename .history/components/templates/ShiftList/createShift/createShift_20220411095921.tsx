@@ -1,8 +1,10 @@
-import Shifts from "../../../organisms/teacher/Shift";
+import EditReserve from "../../../../components/organisms/teacher/CreateUser";
 import Header from "../../../templates/Header/HeaderNext";
+import Footer from "../../../templates/Footer/Footer";
 import HeaderAtMd from "../../../../components/templates/Header/Header";
 import { Box } from "@mui/material";
 import { createMedia } from "@artsy/fresnel";
+
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
     sm: 0,
@@ -12,24 +14,24 @@ const { MediaContextProvider, Media } = createMedia({
   },
 });
 
-export default function ShiftList_Teacher() {
+export default function CreateShiftPage() {
   return (
     <>
       <MediaContextProvider>
         <Media greaterThan="md">
           <Header>
             <Box mt={10}>
-              <Shifts />
+              <EditReserve />
             </Box>
           </Header>
         </Media>
         <Media at="md">
           <HeaderAtMd />
-          <Shifts />
+          <EditReserve />
         </Media>
         <Media at="sm">
           <HeaderAtMd />
-          <Shifts />
+          <EditReserve />
         </Media>
       </MediaContextProvider>
     </>

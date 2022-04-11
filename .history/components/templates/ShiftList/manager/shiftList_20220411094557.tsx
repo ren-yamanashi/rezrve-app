@@ -1,8 +1,10 @@
-import Shifts from "../../../organisms/teacher/Shift";
+import ShiftsAll from "../../../organisms/manager/ShiftAll";
 import Header from "../../../templates/Header/HeaderNext";
+import Footer from "../../../templates/Footer/Footer";
 import HeaderAtMd from "../../../../components/templates/Header/Header";
 import { Box } from "@mui/material";
 import { createMedia } from "@artsy/fresnel";
+import Title from "../../../../components/atoms/Text/PrimaryTitle";
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
     sm: 0,
@@ -12,25 +14,29 @@ const { MediaContextProvider, Media } = createMedia({
   },
 });
 
-export default function ShiftList_Teacher() {
+export default function ShiftList_Manager() {
   return (
     <>
       <MediaContextProvider>
         <Media greaterThan="md">
           <Header>
             <Box mt={10}>
-              <Shifts />
+              <ShiftsAll />
             </Box>
           </Header>
         </Media>
         <Media at="md">
           <HeaderAtMd />
-          <Shifts />
+          <Box mt={3}>
+            <ShiftsAll />
+          </Box>
         </Media>
         <Media at="sm">
-          <HeaderAtMd />
-          <Shifts />
+          <Box mt={5} ml={2} mr={2} display="flex">
+            <Title>管理者ページは、 スマートフォンでの閲覧はできません</Title>
+          </Box>
         </Media>
+        <Footer />
       </MediaContextProvider>
     </>
   );

@@ -5,16 +5,15 @@ import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
-// import My File
-import Already from "../../atoms/Sign/AlreadyUser";
-import Header2 from "../../templates/Header/Header3";
-import SignInComponent from "../../atoms/Sign/Sign_in";
-import { useSignUp } from "../../../hooks/user/useUserList";
-import { ToastContainer } from "react-toastify";
-import SignInButton from "../../atoms/Sign/SignInButton";
-import Footer from "../Footer/Footer";
 
-const SignUpPage_Students: FC = () => {
+import Header2 from "../../templates/Header/Header3";
+import { ToastContainer } from "react-toastify";
+import { useSignUp } from "../../../hooks/user/useUserList";
+import Already from "../../atoms/Sign/AlreadyUser";
+import SignIn from "../../atoms/Sign/Sign_in";
+import SignInButton from "../../atoms/Sign/SignInButton";
+
+const SignUpPage_Teacher: FC = () => {
   const theme = createTheme();
   const { loadSingUp } = useSignUp();
   const [email, setEmail] = useState<string>("");
@@ -34,13 +33,13 @@ const SignUpPage_Students: FC = () => {
               alignItems: "center",
             }}
           >
-            <SignInComponent />
+            <SignIn />
             <Box
               component="form"
               noValidate
-              onSubmit={(event) => {
-                loadSingUp(event, email, password, "/login/students/");
-              }}
+              onSubmit={(event) =>
+                loadSingUp(event, email, password, "/login/teacher/")
+              }
               sx={{ mt: 1 }}
             >
               <TextField
@@ -67,14 +66,13 @@ const SignUpPage_Students: FC = () => {
               />
               <SignInButton />
               <Divider />
-              <Already linkTitle={"/login/students/"} />
+              <Already linkTitle={"/login/teacher/"} />
             </Box>
           </Box>
         </Container>
+        <ToastContainer />
       </ThemeProvider>
-      <ToastContainer />
-      <Footer />
     </>
   );
 };
-export default SignUpPage_Students;
+export default SignUpPage_Teacher;

@@ -6,21 +6,21 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import { ToastContainer } from "react-toastify";
-// import my File
+
 import { useAuth } from "../../../hooks/useUserAuth";
-import { useLogin } from "../../../hooks/user/useUserList";
 import Header2 from "../../templates/Header/Header3";
+import { useLogin } from "../../../hooks/user/useUserList";
 import ResetPass from "../../atoms/Sign/ResetPassword";
 import Login from "../../atoms/Sign/Login";
+import Footer from "../../templates/Footer/Footer";
 import LoginButton from "../../atoms/Sign/LoginButton";
-import Footer from "../Footer/Footer";
 
-const LoginPage_Manager: FC = () => {
+const LoginPage_Teacher: FC = () => {
   const theme = createTheme();
   const { user } = useAuth();
-  const { loadLoginUser } = useLogin();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { loadLoginUser } = useLogin();
   return (
     <>
       <Header2 />
@@ -45,8 +45,8 @@ const LoginPage_Manager: FC = () => {
                   event,
                   email,
                   password,
-                  `/reserve/manager/${user?.uid}`,
-                  "manager"
+                  `/reserve/teacher/${user?.uid}`,
+                  "teacher"
                 )
               }
               sx={{ mt: 1 }}
@@ -81,10 +81,10 @@ const LoginPage_Manager: FC = () => {
             </Box>
           </Box>
         </Container>
+        <Footer />
       </ThemeProvider>
       <ToastContainer />
-      <Footer />
     </>
   );
 };
-export default LoginPage_Manager;
+export default LoginPage_Teacher;

@@ -13,6 +13,7 @@ import { UploadImage } from "../../../hooks/user/useUpload";
 import CardComponent from "../../atoms/Card/CardComponent2";
 import PrimaryBtn from "../../atoms/Button/PrimaryButton";
 import FieldTx from "../../atoms/Text/TextField";
+import Footer from "../../templates/Footer/Footer";
 import { useRouter } from "next/router";
 // Create Media
 const { MediaContextProvider, Media } = createMedia({
@@ -152,6 +153,7 @@ export default function UploadFile() {
               </CardComponent>
             </Grid>
           </Box>
+          <Footer />
         </React.Fragment>
         <ToastContainer />
       </MediaContextProvider>

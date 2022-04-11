@@ -1,9 +1,9 @@
-import TeachersRsv from "../../../organisms/manager/TeachersRsv";
-import Header from "../../../templates/Header/HeaderNext";
-import HeaderAtMd from "../../../templates/Header/Header";
+import TeachersRsv from "../../../../components/organisms/student/TeachersRsv";
+import TeachersRsvAtPhone from "../../../../components/organisms/student/TeachersRsvAtPhone";
+import HeaderAtMd from "../../../templates/Header/Header2";
+import Footer from "../../../templates/Footer/Footer";
 import { createMedia } from "@artsy/fresnel";
-import { Box } from "@mui/material";
-//MediaQuery設定
+// Create Media
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
     sm: 0,
@@ -18,11 +18,8 @@ export default function Rsv_Teacher() {
     <>
       <MediaContextProvider>
         <Media greaterThan="md">
-          <Header>
-            <Box mt={10}>
-              <TeachersRsv />
-            </Box>
-          </Header>
+          <HeaderAtMd />
+          <TeachersRsv />
         </Media>
         <Media at="md">
           <HeaderAtMd />
@@ -30,8 +27,9 @@ export default function Rsv_Teacher() {
         </Media>
         <Media at="sm">
           <HeaderAtMd />
-          <TeachersRsv />
+          <TeachersRsvAtPhone />
         </Media>
+        <Footer />
       </MediaContextProvider>
     </>
   );

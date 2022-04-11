@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import TabsUnstyled from "@mui/base/TabsUnstyled";
 import { createMedia } from "@artsy/fresnel";
 import Header from "../../../templates/Header/HeaderNext";
+import Footer from "../../../templates/Footer/Footer";
 import HeaderAtMd from "../../../templates/Header/Header";
 import ReservesAll from "../../../organisms/manager/ReservesAll";
 import SelectDay from "../../../organisms/manager/SelectDayAll";
@@ -106,6 +107,7 @@ export default function ReservePage() {
             <Title>管理者ページは、 スマートフォンでの閲覧はできません</Title>
           </Box>
         </Media>
+        <Footer />
       </MediaContextProvider>
     </>
   );

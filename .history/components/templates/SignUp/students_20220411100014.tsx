@@ -12,7 +12,6 @@ import SignInComponent from "../../atoms/Sign/Sign_in";
 import { useSignUp } from "../../../hooks/user/useUserList";
 import { ToastContainer } from "react-toastify";
 import SignInButton from "../../atoms/Sign/SignInButton";
-import Footer from "../Footer/Footer";
 
 const SignUpPage_Students: FC = () => {
   const theme = createTheme();
@@ -73,7 +72,6 @@ const SignUpPage_Students: FC = () => {
         </Container>
       </ThemeProvider>
       <ToastContainer />
-      <Footer />
     </>
   );
 };

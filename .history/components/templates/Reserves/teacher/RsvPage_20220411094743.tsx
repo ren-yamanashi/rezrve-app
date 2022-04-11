@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 //import my File
 import Reserve from "../../../organisms/teacher/Reserves";
 import Header from "../../../templates/Header/HeaderNext";
+import Footer from "../../../templates/Footer/Footer";
 import HeaderAtMd from "../../../templates/Header/Header";
 import { Box } from "@mui/material";
 import SelectDay from "../../../organisms/teacher/selectday";
@@ -135,6 +136,7 @@ export default function ReservePage() {
             </TabsUnstyled>
           </Box>
         </Media>
+        <Footer />
       </MediaContextProvider>
     </>
   );

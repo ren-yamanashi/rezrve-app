@@ -1,5 +1,6 @@
 import Shifts from "../../../organisms/teacher/Shift";
 import Header from "../../../templates/Header/HeaderNext";
+import Footer from "../../../templates/Footer/Footer";
 import HeaderAtMd from "../../../../components/templates/Header/Header";
 import { Box } from "@mui/material";
 import { createMedia } from "@artsy/fresnel";
@@ -31,6 +32,7 @@ export default function ShiftList_Teacher() {
           <HeaderAtMd />
           <Shifts />
         </Media>
+        <Footer />
       </MediaContextProvider>
     </>
   );

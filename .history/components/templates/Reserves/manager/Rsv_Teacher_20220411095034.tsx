@@ -1,36 +1,39 @@
-import Shifts from "../../../organisms/teacher/Shift";
+import TeachersRsv from "../../../organisms/manager/TeachersRsv";
 import Header from "../../../templates/Header/HeaderNext";
-import HeaderAtMd from "../../../../components/templates/Header/Header";
-import { Box } from "@mui/material";
+import HeaderAtMd from "../../../templates/Header/Header";
+import Footer from "../../../templates/Footer/Footer";
 import { createMedia } from "@artsy/fresnel";
+import { Box } from "@mui/material";
+//MediaQuery設定
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
     sm: 0,
     md: 600,
     lg: 990,
-    xl: 1200,
+    xl: 1220,
   },
 });
 
-export default function ShiftList_Teacher() {
+export default function Rsv_Teacher() {
   return (
     <>
       <MediaContextProvider>
         <Media greaterThan="md">
           <Header>
             <Box mt={10}>
-              <Shifts />
+              <TeachersRsv />
             </Box>
           </Header>
         </Media>
         <Media at="md">
           <HeaderAtMd />
-          <Shifts />
+          <TeachersRsv />
         </Media>
         <Media at="sm">
           <HeaderAtMd />
-          <Shifts />
+          <TeachersRsv />
         </Media>
+        <Footer />
       </MediaContextProvider>
     </>
   );

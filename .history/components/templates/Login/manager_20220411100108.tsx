@@ -13,7 +13,6 @@ import Header2 from "../../templates/Header/Header3";
 import ResetPass from "../../atoms/Sign/ResetPassword";
 import Login from "../../atoms/Sign/Login";
 import LoginButton from "../../atoms/Sign/LoginButton";
-import Footer from "../Footer/Footer";
 
 const LoginPage_Manager: FC = () => {
   const theme = createTheme();
@@ -83,7 +82,6 @@ const LoginPage_Manager: FC = () => {
         </Container>
       </ThemeProvider>
       <ToastContainer />
-      <Footer />
     </>
   );
 };

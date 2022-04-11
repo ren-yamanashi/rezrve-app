@@ -6,16 +6,16 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Divider from "@mui/material/Divider";
 import { ToastContainer } from "react-toastify";
-// import my File
-import { useAuth } from "../../../hooks/useUserAuth";
-import { useLogin } from "../../../hooks/user/useUserList";
-import Header2 from "../../templates/Header/Header3";
-import ResetPass from "../../atoms/Sign/ResetPassword";
-import Login from "../../atoms/Sign/Login";
-import LoginButton from "../../atoms/Sign/LoginButton";
-import Footer from "../Footer/Footer";
 
-const LoginPage_Manager: FC = () => {
+import { useLogin } from "../../../hooks/user/useUserList";
+import { useAuth } from "../../../hooks/useUserAuth";
+import Header2 from "../../templates/Header/Header3";
+import LoginComponent from "../../atoms/Sign/Login";
+import ResetPass from "../../atoms/Sign/ResetPassword";
+import LoginButton from "../../atoms/Sign/LoginButton";
+import Footer from "../../templates/Footer/Footer";
+// 生徒ログイン
+const LoginPage_Student: FC = () => {
   const theme = createTheme();
   const { user } = useAuth();
   const { loadLoginUser } = useLogin();
@@ -36,19 +36,19 @@ const LoginPage_Manager: FC = () => {
               alignItems: "center",
             }}
           >
-            <Login />
+            <LoginComponent />
             <Box
               component="form"
               noValidate
-              onSubmit={(event) =>
+              onSubmit={(event) => {
                 loadLoginUser(
                   event,
                   email,
                   password,
-                  `/reserve/manager/${user?.uid}`,
-                  "manager"
-                )
-              }
+                  `/home/students/${user.uid}`,
+                  "student"
+                );
+              }}
               sx={{ mt: 1 }}
             >
               <Box sx={{ mt: 1 }}>
@@ -76,15 +76,15 @@ const LoginPage_Manager: FC = () => {
                 />
                 <LoginButton />
                 <Divider />
-                <ResetPass />
+                <ResetPass FromAddress={email} />
               </Box>
             </Box>
           </Box>
         </Container>
+        <Footer />
       </ThemeProvider>
       <ToastContainer />
-      <Footer />
     </>
   );
 };
-export default LoginPage_Manager;
+export default LoginPage_Student;

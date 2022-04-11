@@ -10,10 +10,10 @@ import { ToastContainer } from "react-toastify";
 import { useAuth } from "../../../hooks/useUserAuth";
 import { useLogin } from "../../../hooks/user/useUserList";
 import Header2 from "../../templates/Header/Header3";
+import Footer from "../../templates/Footer/Footer";
 import ResetPass from "../../atoms/Sign/ResetPassword";
 import Login from "../../atoms/Sign/Login";
 import LoginButton from "../../atoms/Sign/LoginButton";
-import Footer from "../Footer/Footer";
 
 const LoginPage_Manager: FC = () => {
   const theme = createTheme();
@@ -81,9 +81,9 @@ const LoginPage_Manager: FC = () => {
             </Box>
           </Box>
         </Container>
+        <Footer />
       </ThemeProvider>
       <ToastContainer />
-      <Footer />
     </>
   );
 };
