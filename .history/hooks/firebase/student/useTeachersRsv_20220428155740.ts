@@ -1,3 +1,5 @@
+//import notIn File
+import { atom, useRecoilState } from "recoil";
 import * as React from "react";
 import { db, timestamp } from "../useFirebase";
 import {
@@ -258,7 +260,7 @@ export const useTeachersRsv_schedule = () => {
     loadSchedulesX(pageQuery?.uid).then(() => {
       setTimeout(() => completeLoading(),500)
     })
-  },[pageQuery?.uid])
+  })
   return {
     loadRsvScheduleAll_X,
     loadRsvScheduleAll_Y,

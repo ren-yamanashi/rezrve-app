@@ -1,14 +1,8 @@
 import * as React from "react";
 import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { atom } from "recoil";
 //import in File
 import { useAlert } from "../../useAlert";
 import { db } from "../useFirebase";
-const initialError: boolean = false;
-export const errState = atom({
-  key: "error",
-  default: initialError,
-});
 
 export const useDeleteShift = () => {
   const { showErrorMessage, showSuccessMessage } = useAlert();

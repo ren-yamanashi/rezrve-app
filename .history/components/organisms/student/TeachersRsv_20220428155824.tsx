@@ -63,13 +63,6 @@ const TeachersRsv = () => {
   const { changeDateValue, newDateTime, dateArr, dayArr } = useDate();
   const { loadSchedulesX, loadSchedulesY, loadSchedulesZ, rsvArr } =
     useTeachersRsv_schedule();
-  // ここはcomponent内でuseEffectする
-  React.useEffect(() => {
-    if (!process.browser) {
-      return;
-    }
-    loadUser_query(query?.uid);
-  }, [process.browser, query.uid]);
   return (
     <>
       <React.Fragment>

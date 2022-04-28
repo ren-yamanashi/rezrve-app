@@ -63,6 +63,17 @@ const ScheduleAll = () => {
       setTimeout(() => completeLoading(), 500)
     );
   };
+  React.useEffect(() => {
+    if (!process.browser) {
+      return;
+    }
+    if (user === null) {
+      return;
+    }
+    loadUser_query(user?.uid);
+    loadStaffList();
+  }, [process.browser, user]);
+
   return (
     <>
       <React.Fragment>

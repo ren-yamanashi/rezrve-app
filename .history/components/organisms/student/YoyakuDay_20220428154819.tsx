@@ -1,23 +1,24 @@
+import FilterListIcon from "@mui/icons-material/FilterList";
 import Table from "@mui/material/Table";
 import Tooltip from "@mui/material/Tooltip";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import IconButton from "@mui/material/IconButton";
 import React from "react";
 import Box from "@mui/material/Box";
-import dayjs from "dayjs";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { teal } from "@mui/material/colors";
 import { ToastContainer } from "react-toastify";
+import dayjs from "dayjs";
 import { createMedia } from "@artsy/fresnel";
 import { useRouter } from "next/router";
 //内部インポート
 import GetRsvModal from "../../templates/Modal/GetReserveModal";
 import AlertComponent from "../../atoms/Alert/Alert";
 import DateRangePicker from "../../atoms/Date/Date ";
-import PrimaryBtn from "../../atoms/Button/PrimaryButton";
-import Loading from "../../atoms/loading/loadingComponent";
-import SearchStudentModal from "../../templates/Modal/SearchStudentModal";
+import { useAuth } from "../../../hooks/firebase/useUserAuth";
 import { useSelectUser } from "../../../hooks/firebase/user/useUserList";
 import { useHandle } from "../../../hooks/useHandle";
 import { useGetReserves } from "../../../hooks/firebase/teacher/useGetReserves";
@@ -26,6 +27,9 @@ import { useDate } from "../../../hooks/date/useDate";
 import { useSelectReserve } from "../../../hooks/useSelectReserve";
 import { Query } from "../../../models/router_query";
 import { useLoading } from "../../../hooks/useLoading";
+import PrimaryBtn from "../../atoms/Button/PrimaryButton";
+import Loading from "../../atoms/loading/loadingComponent";
+import SearchStudentModal from "../../templates/Modal/SearchStudentModal";
 
 //　Create Media
 const { MediaContextProvider, Media } = createMedia({
@@ -81,7 +85,17 @@ const RsvDate = () => {
                     </TableCell>
                     <TableCell style={{ fontWeight: 600, width: "25%" }}>
                       <Box display="flex" ml={3}>
-                        時間
+                        <Box mt={1}>時間</Box>
+                        {/* <IconButton onClick={handleOpen6}>
+                          <FilterListIcon />
+                        </IconButton>
+                        <Media greaterThan="md">
+                          <IconButton
+                            onClick={() => loadingReserves(newDateTime)}
+                          >
+                            <RestartAltIcon />
+                          </IconButton>
+                        </Media> */}
                       </Box>
                     </TableCell>
                     <TableCell style={{ fontWeight: 600 }} />
@@ -160,11 +174,7 @@ const RsvDate = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {!reserve || reserve.length == 0 ? (
-                    <AlertComponent>
-                      予約可能なレッスンは見つかりませんでした
-                    </AlertComponent>
-                  ) : (
+                  {reserve &&
                     reserve.map((freeList) => (
                       <TableRow key={freeList.id}>
                         <TableCell>
@@ -199,8 +209,7 @@ const RsvDate = () => {
                           </Tooltip>
                         </TableCell>
                       </TableRow>
-                    ))
-                  )}
+                    ))}
                 </TableBody>
               </Table>
             </Media>

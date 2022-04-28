@@ -1,3 +1,5 @@
+//import notIn File
+import { atom,useRecoilState } from 'recoil'
 import * as React from "react"
 import {
 	collection,
@@ -5,6 +7,8 @@ import {
 	where,
 	orderBy,
 	getDocs,
+	QuerySnapshot,
+	DocumentData,
   } from "firebase/firestore";
 import { useRouter } from 'next/router';
 //import in File 
@@ -21,7 +25,6 @@ export const useReserves_Date = () => {
 	const pageQuery = router.query as Query 
 	const {newDateTime} =useDate()
 	const {showErrorMessage} = useAlert()
-	const {startLoading,completeLoading} = useLoading()
 	const [reserve,setReserve] = React.useState<FreeList[]>([])
 	const loadRsv_date = async(dateTime,companyId) => {
 		try {
@@ -49,10 +52,7 @@ export const useReserves_Date = () => {
 		if(pageQuery?.id == null) {
 			return;
 		} 
-		startLoading();
-		loadRsv_date(newDateTime,pageQuery?.id).then(() => {
-			setTimeout(() => completeLoading(),500)
-		})
+		loadRsv_date(newDateTime,pageQuery?.id)
 	},[pageQuery?.id])
 	return {reserve,loadRsv_date}
 }
