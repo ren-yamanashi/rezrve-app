@@ -7,6 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import { blue } from "@mui/material/colors";
 //import my File
 import Title_15 from "../../atoms/Text/Title_15";
+import { useHandle } from "../../../hooks/useHandle";
 import CreateStaffModal from "../../templates/Modal/CreateStaff";
 import SetStaffDataModal from "../../templates/Modal/SetStaffData";
 import { useRouter } from "next/router";
@@ -72,16 +73,8 @@ const CreateStaff = () => {
           </Grid>
         </Box>
       </>
-      <CreateStaffModal
-        open={open.open1}
-        handleClose={handleClose}
-        loadOpen={() => handleOpen2()}
-      />
-      <SetStaffDataModal
-        open={open.open2}
-        handleClose={handleClose2}
-        queryID={query.id}
-      />
+      <CreateStaffModal open={open.open1} handleClose={handleClose} />
+      <SetStaffDataModal queryID={query.id} />
     </React.Fragment>
   );
 };

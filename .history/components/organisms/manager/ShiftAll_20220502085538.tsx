@@ -20,6 +20,7 @@ import DateRangePicker from "../../atoms/Date/Date ";
 import SelectTeacherModal from "../../templates/Modal/SelectTeacherModal";
 import Loading from "../../atoms/loading/loadingComponent";
 import AlertComponent from "../../atoms/Alert/Alert";
+import { useHandle } from "../../../hooks/useHandle";
 import { useSelectUser_query } from "../../../hooks/firebase/user/useUserList";
 import { useLoading } from "../../../hooks/useLoading";
 import { teal } from "@mui/material/colors";
@@ -35,7 +36,8 @@ const ShiftsAll = () => {
   const router = useRouter();
   const { usersList } = useStaffList();
   const { loading } = useLoading();
-  const { chgDate, dateValue } = useDate();
+  const { chgDate, dateValue, newDateTime } = useDate();
+  const { handleOpen7 } = useHandle();
   const { user_query } = useSelectUser_query();
   const { freeSpaces, loadFreeSpace_newValue } = useFreeSpace_newValue();
   const { deleteShift } = useDeleteFreeSpace();

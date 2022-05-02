@@ -17,6 +17,7 @@ import TableCellComponent3 from "../../atoms/TableCell/TableCell3";
 import SearchStudentModal from "../../templates/Modal/SearchStudentModal";
 import GetRsv_OK_Cancel from "../../atoms/andMore.../GetRsv_OKCancel2";
 import { useAuth } from "../../../hooks/firebase/useUserAuth";
+import { useHandle } from "../../../hooks/useHandle";
 import { useGetReserves } from "../../../hooks/firebase/manager/useReserves";
 import { useCreateShift } from "../../../hooks/firebase/manager/useCreateShift";
 import { useChancelRsv } from "../../../hooks/firebase/manager/useReserves";
@@ -35,6 +36,7 @@ const SelectDayAll = () => {
   const { getReserves } = useGetReserves();
   const { createShift } = useCreateShift();
   const { dateValue, newDateTime, chgDate } = useDate();
+
   const [open, setOpen] = React.useState({
     open1: false,
     open2: false,
@@ -105,7 +107,7 @@ const SelectDayAll = () => {
                               time={value.time}
                               id={value.id}
                               click={() => {
-                                handleOpen4();
+                                handleOpen2();
                                 selectRsv(value);
                               }}
                             />
@@ -116,7 +118,7 @@ const SelectDayAll = () => {
                               time={value.time}
                               id={value.id}
                               click={() => {
-                                handleOpen2();
+                                handleOpen3();
                                 selectRsv(value);
                               }}
                             />
@@ -148,8 +150,6 @@ const SelectDayAll = () => {
         />
         {/* 予約登録確認　*/}
         <GetRsvModal
-          open={open.open3}
-          handleClose={handleClose3}
           date={rsvData.date}
           teacher={user && user.displayName}
           student={rsvData.student}
@@ -172,17 +172,12 @@ const SelectDayAll = () => {
         />
         {/* 予約者入力 */}
         <SearchStudentModal
-          open={open.open2}
-          handleClose={handleClose2}
-          loadOpen={() => handleOpen3()}
           changeEvent={(e) => selectStudent(e)}
           changeEmail={(e) => setEmail(e)}
           changePhoneNumber={(e) => setPhoneNumber(e)}
         />
         {/* 予約内容詳細 */}
         <RsvModal
-          open={open.open4}
-          handleClose={handleClose4}
           date={rsvData.date}
           teacher={user && user.displayName}
           student={rsvData.rsvStudent}

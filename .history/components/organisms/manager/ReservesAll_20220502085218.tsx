@@ -17,6 +17,7 @@ import SelectTeacherModal from "../../templates/Modal/SelectTeacherModal";
 import Loading from "../../atoms/loading/loadingComponent";
 import RsvModal from "../../templates/Modal/RsvModal";
 import { useStaffList } from "../../../hooks/firebase/user/useUserList";
+import { useHandle } from "../../../hooks/useHandle";
 import { useSelectReserve } from "../../../hooks/useSelectReserve";
 import { useLoading } from "../../../hooks/useLoading";
 import {
@@ -27,6 +28,7 @@ import {
 // 1週間の予約
 const ReservesAll = () => {
   const { rsvData, selectRsv } = useSelectReserve();
+  const { handleOpen7, handleOpen4 } = useHandle();
   const { usersList } = useStaffList();
   const { chancelRsv } = useChancelRsv();
   const { reserve } = useReserves_Week();

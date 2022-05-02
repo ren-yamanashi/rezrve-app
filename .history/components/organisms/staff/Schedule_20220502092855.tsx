@@ -17,6 +17,7 @@ import TableCellComponent3 from "../../atoms/TableCell/TableCell3";
 import SearchStudentModal from "../../templates/Modal/SearchStudentModal";
 import GetRsv_OK_Cancel from "../../atoms/andMore.../GetRsv_OKCancel2";
 import { useAuth } from "../../../hooks/firebase/useUserAuth";
+import { useHandle } from "../../../hooks/useHandle";
 import { useGetReserves } from "../../../hooks/firebase/manager/useReserves";
 import { useCreateShift } from "../../../hooks/firebase/manager/useCreateShift";
 import { useChancelRsv } from "../../../hooks/firebase/manager/useReserves";
@@ -35,6 +36,7 @@ const SelectDayAll = () => {
   const { getReserves } = useGetReserves();
   const { createShift } = useCreateShift();
   const { dateValue, newDateTime, chgDate } = useDate();
+
   const [open, setOpen] = React.useState({
     open1: false,
     open2: false,
@@ -174,7 +176,7 @@ const SelectDayAll = () => {
         <SearchStudentModal
           open={open.open2}
           handleClose={handleClose2}
-          loadOpen={() => handleOpen3()}
+          loadOpen={() => handleOpen3}
           changeEvent={(e) => selectStudent(e)}
           changeEmail={(e) => setEmail(e)}
           changePhoneNumber={(e) => setPhoneNumber(e)}

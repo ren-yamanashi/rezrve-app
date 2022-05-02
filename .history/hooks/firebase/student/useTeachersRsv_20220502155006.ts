@@ -19,7 +19,6 @@ export const useTeachersRsv_schedule = () => {
   const router = useRouter();
   const pageQuery = router.query as Query
   const { showErrorMessage } = useAlert();
-  // ここはオブジェクトにしない　※上書きされて7日目しか表示されなくなる
   const [rsv, setRsv] = React.useState<FreeList[]>([]);
   const [rsv2, setRsv2] = React.useState<FreeList[]>([]);
   const [rsv3, setRsv3] = React.useState<FreeList[]>([]);

@@ -226,7 +226,9 @@ const ScheduleAll = () => {
           changePhoneNumber={(e) => setPhoneNumber(e)}
           open={open.open2}
           handleClose={handleClose2}
-          loadOpen={() => handleOpen3()}
+          loadOpen={() => {
+            handleOpen3();
+          }}
         />
         <RsvModal
           open={open.open4}
@@ -237,7 +239,9 @@ const ScheduleAll = () => {
           email={rsvData.email}
           phoneNumber={rsvData.phoneNumber}
           reserver={rsvData.reserver}
-          chancelRsv={(e) => chancelRsv(e, rsvData.id)}
+          chancelRsv={(e) => {
+            chancelRsv(e, rsvData.id);
+          }}
         />
       </React.Fragment>
       <ToastContainer />

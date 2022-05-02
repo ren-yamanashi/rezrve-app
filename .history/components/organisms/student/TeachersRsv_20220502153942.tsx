@@ -20,25 +20,27 @@ import { blue, grey } from "@mui/material/colors";
 import { ToastContainer } from "react-toastify";
 import { createMedia } from "@artsy/fresnel";
 // import my File
+import SnackComponent2 from "../../atoms/Snack/SnackTitle2";
+import TableCellComponent6 from "../../atoms/TableCell/TableCell6";
+import GetRsv_OK_Cancel from "../../atoms/andMore.../GetRsv_OK_Cancel";
+import GetRsvModal from "../../templates/Modal/GetReserveModal";
+import Title_15 from "../../atoms/Text/Title_15";
 import { useDate } from "../../../hooks/date/useDate";
 import { useGetReserves } from "../../../hooks/firebase/manager/useReserves";
+import { useHandle } from "../../../hooks/useHandle";
 import { useRouter } from "next/router";
 import { useSelectUser } from "../../../hooks/firebase/user/useUserList";
-import { useTeachersRsv_schedule } from "../../../hooks/firebase/student/useTeachersRsv";
 import { useStaffList } from "../../../hooks/firebase/user/useUserList";
+import { useTeachersRsv_schedule } from "../../../hooks/firebase/student/useTeachersRsv";
 import { useSelectReserve } from "../../../hooks/useSelectReserve";
 import { Query } from "../../../models/router_query";
 import { useLoading } from "../../../hooks/useLoading";
 import PrimaryText from "../../atoms/Text/Typography4";
 import SelectTeacherModal from "../../templates/Modal/SelectTeacherModal";
-import SearchStudentModal from "../../templates/Modal/SearchStudentModal";
 import Loading from "../../atoms/loading/loadingComponent";
-import SnackComponent2 from "../../atoms/Snack/SnackTitle2";
-import TableCellComponent4 from "../../atoms/TableCell/TableCell4";
-import GetRsv_OK_Cancel from "../../atoms/andMore.../GetRsv_OK_Cancel";
-import GetRsvModal from "../../templates/Modal/GetReserveModal";
-import Title_15 from "../../atoms/Text/Title_15";
+import SearchStudentModal from "../../templates/Modal/SearchStudentModal";
 
+// Create Media
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
     sm: 0,
@@ -48,21 +50,22 @@ const { MediaContextProvider, Media } = createMedia({
   },
 });
 // 講師予約
-const TeachersRsv_Mobile = () => {
+const TeachersRsv = () => {
+  const { loading } = useLoading();
   const router = useRouter();
   const query = router.query as Query;
-  const { loading } = useLoading();
-  const { usersList } = useStaffList();
   const { user_query } = useSelectUser();
+  const { usersList } = useStaffList();
   const { getReserves } = useGetReserves();
   const { changeDateValue, newDateTime, dateArr, dayArr } = useDate();
+  const { loadSchedulesY, loadSchedulesZ, rsvArr } = useTeachersRsv_schedule();
   const { rsvData, selectStudent, setEmail, setPhoneNumber, selectRsv } =
     useSelectReserve();
-  const { loadSchedulesY, loadSchedulesZ, rsvArr } = useTeachersRsv_schedule();
   const [open, setOpen] = React.useState({
     open1: false,
     open2: false,
     open3: false,
+    open4: false,
   });
   const handleOpen = () => setOpen({ ...open, open1: true });
   const handleClose = () => setOpen({ ...open, open1: false });
@@ -70,7 +73,6 @@ const TeachersRsv_Mobile = () => {
   const handleClose2 = () => setOpen({ ...open, open2: false });
   const handleOpen3 = () => setOpen({ ...open, open3: true });
   const handleClose3 = () => setOpen({ ...open, open3: false });
-
   return (
     <>
       <React.Fragment>
@@ -79,11 +81,11 @@ const TeachersRsv_Mobile = () => {
             <Loading />
           ) : (
             <>
-              <Media at="sm">
+              <Media greaterThan="sm">
                 <Box mt={2} display="flex" justifyContent="center" mx="auto">
                   <CardContent
                     style={{
-                      width: 300,
+                      width: 500,
                       height: 110,
                       borderWidth: "2px",
                       borderStyle: "solid",
@@ -116,7 +118,7 @@ const TeachersRsv_Mobile = () => {
                       <IconButton
                         onClick={() => router.push(`/${query.id}/reserver/`)}
                       >
-                        <HomeIcon sx={{ color: blue[500], fontSize: 20 }} />
+                        <HomeIcon sx={{ color: blue[500], fontSize: 23 }} />
                       </IconButton>
                       <Button onClick={handleOpen}>
                         <PrimaryText
@@ -179,114 +181,112 @@ const TeachersRsv_Mobile = () => {
                     />
                   </IconButton>
                 </Box>
-                <Box overflow="scroll">
-                  <Table
-                    size="small"
-                    sx={{
-                      borderCollapse: "collapse",
-                      mb: 5,
-                      width: 500,
-                      mx: "auto",
-                    }}
+                <Table
+                  size="small"
+                  sx={{
+                    borderCollapse: "collapse",
+                    mb: 5,
+                    maxWidth: 1000,
+                    mx: "auto",
+                  }}
+                >
+                  <TableHead
+                    style={{ backgroundColor: "#FFFFDD", border: "3px" }}
                   >
-                    <TableHead
-                      style={{ backgroundColor: "#FFFFDD", border: "3px" }}
-                    >
-                      <TableRow>
-                        <TableCell
-                          style={{
-                            width: "8%",
-                            borderStyle: "solid none",
-                            borderWidth: "1px",
-                            borderColor: grey[400],
-                          }}
-                        />
-                        {dateArr.map((item) => (
+                    <TableRow>
+                      <TableCell
+                        style={{
+                          width: "8%",
+                          borderStyle: "solid none",
+                          borderWidth: "1px",
+                          borderColor: grey[400],
+                        }}
+                      />
+                      {dateArr.map((item) => (
+                        <>
+                          <TableCellComponent6 date={item.date} />
+                        </>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {user_query?.times.map((t) => (
+                      <TableRow key={t}>
+                        <TableCell>
+                          <Box fontSize={10} sx={{ height: 40, width: "8%" }}>
+                            <Box>{`${t}:00`}</Box>
+                          </Box>
+                        </TableCell>
+                        {rsvArr.map((item) => (
                           <>
-                            <TableCellComponent4 date={item.date} />
+                            <TableCell
+                              sx={{
+                                borderStyle: "dashed solid",
+                                borderWidth: "1px",
+                                borderColor: grey[400],
+                                bgcolor: grey[200],
+                                width: "13%",
+                              }}
+                            >
+                              {item.map(
+                                (i) =>
+                                  i.time == t && (
+                                    <Box
+                                      display="flex"
+                                      justifyContent="center"
+                                      bgcolor={
+                                        i.reserved == false
+                                          ? blue[400]
+                                          : grey[600]
+                                      }
+                                      borderRadius={2}
+                                    >
+                                      <Tooltip
+                                        title={
+                                          <>
+                                            <Box>{`担当者名 : ${i.staff}`}</Box>
+                                            <Box>{`日付 : ${dayjs(
+                                              i.date.toDate()
+                                            ).format("YYYY/MM/DD ")}`}</Box>
+                                            <Box>{`時間 : ${i.time}:00~`}</Box>
+                                          </>
+                                        }
+                                        arrow
+                                      >
+                                        <IconButton
+                                          onClick={() => {
+                                            selectRsv(i);
+                                            i.reserved == false &&
+                                              handleOpen2();
+                                          }}
+                                        >
+                                          {i.reserved == false ? (
+                                            <RadioButtonUncheckedIcon
+                                              sx={{
+                                                color: "white",
+                                                fontSize: 12,
+                                              }}
+                                            />
+                                          ) : (
+                                            <CloseIcon
+                                              sx={{
+                                                color: "white",
+                                                fontSize: 12,
+                                              }}
+                                            />
+                                          )}
+                                        </IconButton>
+                                      </Tooltip>
+                                    </Box>
+                                  )
+                              )}
+                            </TableCell>
                           </>
                         ))}
                       </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {user_query?.times.map((t) => (
-                        <TableRow key={t}>
-                          <TableCell>
-                            <Box fontSize={10} sx={{ height: 40, width: "8%" }}>
-                              <Box>{`${t}:00`}</Box>
-                            </Box>
-                          </TableCell>
-                          {rsvArr.map((item) => (
-                            <>
-                              <TableCell
-                                sx={{
-                                  borderStyle: "dashed solid",
-                                  borderWidth: "1px",
-                                  borderColor: grey[400],
-                                  bgcolor: grey[200],
-                                  width: "13%",
-                                }}
-                              >
-                                {item.map(
-                                  (i) =>
-                                    i.time == t && (
-                                      <Box
-                                        display="flex"
-                                        justifyContent="center"
-                                        bgcolor={
-                                          i.reserved == false
-                                            ? blue[400]
-                                            : grey[600]
-                                        }
-                                        borderRadius={2}
-                                      >
-                                        <Tooltip
-                                          title={
-                                            <>
-                                              <Box>{`担当者名 : ${i.staff}`}</Box>
-                                              <Box>{`日付 : ${dayjs(
-                                                i.date.toDate()
-                                              ).format("YYYY/MM/DD ")}`}</Box>
-                                              <Box>{`時間 : ${i.time}:00~`}</Box>
-                                            </>
-                                          }
-                                          arrow
-                                        >
-                                          <IconButton
-                                            onClick={() => {
-                                              selectRsv(i);
-                                              i.reserved == false &&
-                                                handleOpen2();
-                                            }}
-                                          >
-                                            {i.reserved == false ? (
-                                              <RadioButtonUncheckedIcon
-                                                sx={{
-                                                  color: "white",
-                                                  fontSize: 12,
-                                                }}
-                                              />
-                                            ) : (
-                                              <CloseIcon
-                                                sx={{
-                                                  color: "white",
-                                                  fontSize: 12,
-                                                }}
-                                              />
-                                            )}
-                                          </IconButton>
-                                        </Tooltip>
-                                      </Box>
-                                    )
-                                )}
-                              </TableCell>
-                            </>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </Box>
+                    ))}
+                  </TableBody>
+                </Table>
               </Media>
             </>
           )}
@@ -313,19 +313,19 @@ const TeachersRsv_Mobile = () => {
               )
             }
           />
+          <SearchStudentModal
+            open={open.open2}
+            handleClose={handleClose2}
+            loadOpen={() => handleOpen3}
+            changeEvent={(e) => selectStudent(e)}
+            changeEmail={(e) => setEmail(e)}
+            changePhoneNumber={(e) => setPhoneNumber(e)}
+          />
           <SelectTeacherModal
             open={open.open1}
             handleClose={handleClose}
             users={usersList && usersList}
             queryId={query?.id}
-          />
-          <SearchStudentModal
-            open={open.open2}
-            handleClose={handleClose2}
-            loadOpen={() => handleOpen3()}
-            changeEvent={(e) => selectStudent(e)}
-            changeEmail={(e) => setEmail(e)}
-            changePhoneNumber={(e) => setPhoneNumber(e)}
           />
         </MediaContextProvider>
       </React.Fragment>
@@ -334,4 +334,4 @@ const TeachersRsv_Mobile = () => {
   );
 };
 
-export default TeachersRsv_Mobile;
+export default TeachersRsv;
