@@ -245,7 +245,7 @@ const AddStore = () => {
                         textDecoration: "underline",
                         cursor: "pointer",
                       }}
-                      textTitle={`http://localhost:3000/${query?.id}/reserver/`}
+                      textTitle={`https://next-reserve-app.vercel.app/${query?.id}/reserver/`}
                     />
                   </Box>
                 </Box>
