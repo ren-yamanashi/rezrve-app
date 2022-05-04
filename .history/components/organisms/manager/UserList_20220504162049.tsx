@@ -16,7 +16,6 @@ import { useStaffList } from "../../../hooks/firebase/user/useUserList";
 import { useCreateShift } from "../../../hooks/firebase/manager/useCreateShift";
 import { useSelectReserve } from "../../../hooks/useSelectReserve";
 import { useLoading } from "../../../hooks/useLoading";
-import { useHandle } from "../../../hooks/useHandle";
 import CreateShiftModal from "../../templates/Modal/CreateShift_manager";
 import CreateStaff from "./CreateStaff";
 import Title from "../../atoms/Text/PrimaryTitle";
@@ -25,7 +24,9 @@ import Loading from "../../atoms/loading/loadingComponent";
 
 // スタッフ一覧（シフト登録）
 export default function UsersList() {
-  const { open, handleOpen1, handleClose1 } = useHandle();
+  const [open, setOpen] = React.useState<boolean>(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const { createShift } = useCreateShift();
   const { handleChangeTime, rsvData, selectTeacher } = useSelectReserve();
   const { usersList, deleteTeacher } = useStaffList();
@@ -53,7 +54,7 @@ export default function UsersList() {
                       justifyContent="center"
                       mx="auto"
                     >
-                      <Grid item xs={6} sm={4} lg={4} md={5}>
+                      <Grid item xs={6} sm={4} lg={3} md={5}>
                         <Box
                           mb={3}
                           display="flex"
@@ -95,7 +96,7 @@ export default function UsersList() {
                             <Box display="flex" justifyContent="center">
                               <IconButton
                                 onClick={() => {
-                                  handleOpen1();
+                                  handleOpen();
                                   selectTeacher(index);
                                 }}
                               >
@@ -144,12 +145,12 @@ export default function UsersList() {
           </>
         )}
         <CreateShiftModal
-          open={open.open1}
-          handleClose={handleClose1}
+          open={open}
+          handleClose={handleClose}
           staffName={rsvData.teacherName}
           time={rsvData.time}
           changeSelect={handleChangeTime}
-          createShift={(e) => {
+          createShift={(e) =>
             createShift(
               e,
               rsvData.teacherName,
@@ -157,9 +158,8 @@ export default function UsersList() {
               rsvData.teacherId,
               user_query?.companyId,
               1
-            );
-            handleClose1();
-          }}
+            )
+          }
         />
         <CreateStaff />
       </React.Fragment>

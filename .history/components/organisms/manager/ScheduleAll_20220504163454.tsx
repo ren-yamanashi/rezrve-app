@@ -204,7 +204,8 @@ const ScheduleAll = () => {
           student={rsvData.student}
           email={rsvData.email}
           phoneNumber={rsvData.phoneNumber}
-          clickEv={(e) =>
+          clickEv={(e) => {
+            handleClose3();
             getReserves(
               e,
               newDateTime,
@@ -216,8 +217,8 @@ const ScheduleAll = () => {
               "管理者登録",
               user_query?.companyId,
               user?.uid
-            )
-          }
+            );
+          }}
         />
         <SearchStudentModal
           changeEvent={(e) => selectStudent(e)}
@@ -225,7 +226,10 @@ const ScheduleAll = () => {
           changePhoneNumber={(e) => setPhoneNumber(e)}
           open={open.open2}
           handleClose={handleClose2}
-          loadOpen={() => handleOpen3()}
+          loadOpen={() => {
+            handleClose2();
+            handleOpen3();
+          }}
         />
         <RsvModal
           open={open.open4}

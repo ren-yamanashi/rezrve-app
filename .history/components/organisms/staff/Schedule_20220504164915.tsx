@@ -188,10 +188,7 @@ const SelectDayAll = () => {
           email={rsvData.email}
           phoneNumber={rsvData.phoneNumber}
           reserver={rsvData.reserver}
-          chancelRsv={(e) => {
-            chancelRsv(e, rsvData.id);
-            handleClose4();
-          }}
+          chancelRsv={(e) => chancelRsv(e, rsvData.id)}
         />
       </React.Fragment>
       <ToastContainer />

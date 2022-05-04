@@ -45,6 +45,11 @@ const FreeSpace = () => {
     useSelectReserve();
   const { open, handleOpen1, handleOpen2, handleClose1, handleClose2 } =
     useHandle();
+  const [open, setOpen] = React.useState({ open1: false, open2: false });
+  const handleOpen = () => setOpen({ ...open, open1: true });
+  const handleClose = () => setOpen({ ...open, open1: false });
+  const handleOpen2 = () => setOpen({ ...open, open2: true });
+  const handleClose2 = () => setOpen({ ...open, open2: false });
   //ローディング関数
   const loadShifts = (newDate) => {
     startLoading();
@@ -105,7 +110,7 @@ const FreeSpace = () => {
                           <Tooltip title={`予約する:${freeList.staff}`} arrow>
                             <PrimaryBtn
                               click={() => {
-                                handleOpen1();
+                                handleOpen();
                                 selectRsv(freeList);
                               }}
                               buttonText={"登録"}
@@ -164,7 +169,7 @@ const FreeSpace = () => {
                                   fontSize: "10px",
                                 }}
                                 click={() => {
-                                  handleOpen1();
+                                  handleOpen();
                                   selectRsv(freeList);
                                 }}
                                 buttonText={"登録"}
@@ -205,7 +210,7 @@ const FreeSpace = () => {
             {/* 生徒検索 */}
             <SearchStudentModal
               open={open.open1}
-              handleClose={handleClose1}
+              handleClose={handleClose}
               loadOpen={() => handleOpen2()}
               changeEvent={(e) => selectStudent(e)}
               changeEmail={(e) => setEmail(e)}

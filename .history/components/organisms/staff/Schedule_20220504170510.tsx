@@ -154,7 +154,7 @@ const SelectDayAll = () => {
           student={rsvData.student}
           email={rsvData.email}
           phoneNumber={rsvData.phoneNumber}
-          clickEv={(e) =>
+          clickEv={(e) => {
             getReserves(
               e,
               newDateTime,
@@ -166,8 +166,8 @@ const SelectDayAll = () => {
               "講師登録",
               user_query?.companyId,
               user?.uid
-            )
-          }
+            );
+          }}
         />
         {/* 予約者入力 */}
         <SearchStudentModal

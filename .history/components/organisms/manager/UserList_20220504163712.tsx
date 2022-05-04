@@ -149,7 +149,7 @@ export default function UsersList() {
           staffName={rsvData.teacherName}
           time={rsvData.time}
           changeSelect={handleChangeTime}
-          createShift={(e) => {
+          createShift={(e) =>
             createShift(
               e,
               rsvData.teacherName,
@@ -157,9 +157,8 @@ export default function UsersList() {
               rsvData.teacherId,
               user_query?.companyId,
               1
-            );
-            handleClose1();
-          }}
+            )
+          }
         />
         <CreateStaff />
       </React.Fragment>

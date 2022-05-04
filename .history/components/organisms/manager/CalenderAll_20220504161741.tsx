@@ -55,10 +55,7 @@ const CalenderAll: React.FC = () => {
           email={rsvData.email}
           phoneNumber={rsvData.phoneNumber}
           reserver={rsvData.reserver}
-          chancelRsv={(e) => {
-            chancelRsv(e, rsvData.id);
-            handleClose1();
-          }}
+          chancelRsv={(e) => chancelRsv(e, rsvData.id)}
         />
         <ToastContainer />
       </React.Fragment>

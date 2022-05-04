@@ -33,6 +33,17 @@ import AlertComponent from "../../atoms/Alert/Alert";
 
 // スケジュール確認
 const ScheduleAll = () => {
+  const {
+    handleOpen1,
+    handleOpen2,
+    handleOpen3,
+    handleOpen4,
+    handleClose1,
+    handleClose2,
+    handleClose3,
+    handleClose4,
+    open,
+  } = useHandle();
   const { user } = useAuth();
   const { user_query } = useSelectUser_query();
   const { startLoading, completeLoading, loading } = useLoading();
@@ -51,17 +62,6 @@ const ScheduleAll = () => {
     handleChangeTime,
     setEmail,
   } = useSelectReserve();
-  const {
-    handleOpen1,
-    handleOpen2,
-    handleOpen3,
-    handleOpen4,
-    handleClose1,
-    handleClose2,
-    handleClose3,
-    handleClose4,
-    open,
-  } = useHandle();
   // ローディング関数
   const loadSchedules = (newDate, companyId) => {
     startLoading();
@@ -204,7 +204,7 @@ const ScheduleAll = () => {
           student={rsvData.student}
           email={rsvData.email}
           phoneNumber={rsvData.phoneNumber}
-          clickEv={(e) =>
+          clickEv={(e) => {
             getReserves(
               e,
               newDateTime,
@@ -216,8 +216,9 @@ const ScheduleAll = () => {
               "管理者登録",
               user_query?.companyId,
               user?.uid
-            )
-          }
+            );
+            handleClose3();
+          }}
         />
         <SearchStudentModal
           changeEvent={(e) => selectStudent(e)}

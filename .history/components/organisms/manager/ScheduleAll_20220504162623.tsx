@@ -33,6 +33,17 @@ import AlertComponent from "../../atoms/Alert/Alert";
 
 // スケジュール確認
 const ScheduleAll = () => {
+  const {
+    handleOpen1,
+    handleOpen2,
+    handleOpen3,
+    handleOpen4,
+    handleClose1,
+    handleClose2,
+    handleClose3,
+    handleClose4,
+    open,
+  } = useHandle();
   const { user } = useAuth();
   const { user_query } = useSelectUser_query();
   const { startLoading, completeLoading, loading } = useLoading();
@@ -51,17 +62,6 @@ const ScheduleAll = () => {
     handleChangeTime,
     setEmail,
   } = useSelectReserve();
-  const {
-    handleOpen1,
-    handleOpen2,
-    handleOpen3,
-    handleOpen4,
-    handleClose1,
-    handleClose2,
-    handleClose3,
-    handleClose4,
-    open,
-  } = useHandle();
   // ローディング関数
   const loadSchedules = (newDate, companyId) => {
     startLoading();
@@ -185,16 +185,15 @@ const ScheduleAll = () => {
           staffName={rsvData.teacherName}
           time={rsvData.time}
           changeSelect={handleChangeTime}
-          createShift={(e) => {
+          createShift={(e) =>
             createShift(
               e,
               rsvData.teacherName,
               rsvData.time,
               rsvData.teacherId,
               user_query?.companyId
-            );
-            handleClose1();
-          }}
+            )
+          }
         />
         <GetRsvModal
           open={open.open3}
@@ -204,7 +203,7 @@ const ScheduleAll = () => {
           student={rsvData.student}
           email={rsvData.email}
           phoneNumber={rsvData.phoneNumber}
-          clickEv={(e) =>
+          clickEv={(e) => {
             getReserves(
               e,
               newDateTime,
@@ -216,8 +215,8 @@ const ScheduleAll = () => {
               "管理者登録",
               user_query?.companyId,
               user?.uid
-            )
-          }
+            );
+          }}
         />
         <SearchStudentModal
           changeEvent={(e) => selectStudent(e)}
@@ -236,10 +235,7 @@ const ScheduleAll = () => {
           email={rsvData.email}
           phoneNumber={rsvData.phoneNumber}
           reserver={rsvData.reserver}
-          chancelRsv={(e) => {
-            chancelRsv(e, rsvData.id);
-            handleClose4();
-          }}
+          chancelRsv={(e) => chancelRsv(e, rsvData.id)}
         />
       </React.Fragment>
       <ToastContainer />

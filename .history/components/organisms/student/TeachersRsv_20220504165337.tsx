@@ -117,7 +117,7 @@ const TeachersRsv = () => {
                       >
                         <HomeIcon sx={{ color: blue[500], fontSize: 23 }} />
                       </IconButton>
-                      <Button onClick={handleOpen1}>
+                      <Button onClick={handleOpen}>
                         <PrimaryText
                           size={12}
                           color={blue[600]}
@@ -320,7 +320,7 @@ const TeachersRsv = () => {
           />
           <SelectTeacherModal
             open={open.open1}
-            handleClose={handleClose1}
+            handleClose={handleClose}
             users={usersList && usersList}
             queryId={query?.id}
           />

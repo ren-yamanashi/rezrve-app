@@ -91,7 +91,7 @@ const SelectDayAll = () => {
                   {rsvArr.map((index) => (
                     <>
                       {index.error == true && (
-                        <TableCellComponent click={handleOpen1} />
+                        <TableCellComponent click={handleOpen} />
                       )}
                       {index.rsv &&
                         index.rsv.map((value) =>
@@ -130,20 +130,19 @@ const SelectDayAll = () => {
         {/* シフト登録 */}
         <CreateShiftModal
           open={open.open1}
-          handleClose={handleClose1}
+          handleClose={handleClose}
           staffName={user_query?.userName}
           time={rsvData.time}
           changeSelect={handleChangeTime}
-          createShift={(e) => {
+          createShift={(e) =>
             createShift(
               e,
               user_query?.userName,
               rsvData.time,
               user_query?.id,
               user_query.companyId
-            );
-            handleClose1();
-          }}
+            )
+          }
         />
         {/* 予約登録確認　*/}
         <GetRsvModal
@@ -188,10 +187,7 @@ const SelectDayAll = () => {
           email={rsvData.email}
           phoneNumber={rsvData.phoneNumber}
           reserver={rsvData.reserver}
-          chancelRsv={(e) => {
-            chancelRsv(e, rsvData.id);
-            handleClose4();
-          }}
+          chancelRsv={(e) => chancelRsv(e, rsvData.id)}
         />
       </React.Fragment>
       <ToastContainer />

@@ -187,7 +187,7 @@ const FreeSpace = () => {
               student={rsvData.student}
               email={rsvData.email}
               phoneNumber={rsvData.phoneNumber}
-              clickEv={(e) =>
+              clickEv={(e) => {
                 getReserves(
                   e,
                   newDateTime,
@@ -199,14 +199,18 @@ const FreeSpace = () => {
                   "講師登録",
                   user_query?.companyId,
                   user?.uid
-                )
-              }
+                );
+                handleClose2();
+              }}
             />
             {/* 生徒検索 */}
             <SearchStudentModal
               open={open.open1}
               handleClose={handleClose1}
-              loadOpen={() => handleOpen2()}
+              loadOpen={() => {
+                handleOpen2();
+                handleClose1();
+              }}
               changeEvent={(e) => selectStudent(e)}
               changeEmail={(e) => setEmail(e)}
               changePhoneNumber={(e) => setPhoneNumber(e)}

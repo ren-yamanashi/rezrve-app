@@ -112,7 +112,7 @@ const RsvDate_Manager = () => {
           student={rsvData.student}
           email={rsvData.email}
           phoneNumber={rsvData.phoneNumber}
-          clickEv={(e) =>
+          clickEv={(e) => {
             getReserves(
               e,
               newDateTime,
@@ -124,13 +124,17 @@ const RsvDate_Manager = () => {
               "管理者登録",
               user_query?.companyId,
               user?.uid
-            )
-          }
+            );
+            handleClose2();
+          }}
         />
         <SearchStudentModal
           open={open.open1}
           handleClose={handleClose1}
-          loadOpen={() => handleOpen2()}
+          loadOpen={() => {
+            handleClose1();
+            handleOpen2();
+          }}
           changeEvent={(e) => selectStudent(e)}
           changeEmail={(e) => setEmail(e)}
           changePhoneNumber={(e) => setPhoneNumber(e)}

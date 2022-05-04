@@ -101,10 +101,7 @@ const ReservesAll = () => {
         email={rsvData.email}
         phoneNumber={rsvData.phoneNumber}
         reserver={rsvData.reserver}
-        chancelRsv={(e) => {
-          chancelRsv(e, rsvData.id);
-          handleClose2();
-        }}
+        chancelRsv={(e) => chancelRsv(e, rsvData.id)}
       />
       {/* 講師選択 */}
       <SelectTeacherModal

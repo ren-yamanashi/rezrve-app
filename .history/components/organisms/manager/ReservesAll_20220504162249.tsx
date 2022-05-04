@@ -46,7 +46,7 @@ const ReservesAll = () => {
                 <TableCell style={{ fontWeight: 600 }}>
                   <Box>
                     担当者名
-                    <IconButton onClick={handleOpen1}>
+                    <IconButton onClick={handleOpen2}>
                       <FilterListIcon />
                     </IconButton>
                   </Box>
@@ -76,7 +76,7 @@ const ReservesAll = () => {
                       <Tooltip title="詳細確認・キャンセル" arrow>
                         <IconButton
                           onClick={() => {
-                            handleOpen2();
+                            handleOpen1();
                             selectRsv(rsv);
                           }}
                         >
@@ -93,23 +93,20 @@ const ReservesAll = () => {
       )}
       {/* モーダル　予約内容詳細 */}
       <RsvModal
-        open={open.open2}
-        handleClose={handleClose2}
+        open={open.open1}
+        handleClose={handleClose1}
         date={rsvData.date}
         teacher={rsvData.teacher}
         student={rsvData.rsvStudent}
         email={rsvData.email}
         phoneNumber={rsvData.phoneNumber}
         reserver={rsvData.reserver}
-        chancelRsv={(e) => {
-          chancelRsv(e, rsvData.id);
-          handleClose2();
-        }}
+        chancelRsv={(e) => chancelRsv(e, rsvData.id)}
       />
       {/* 講師選択 */}
       <SelectTeacherModal
         open={open.open1}
-        handleClose={handleClose1}
+        handleClose={handleClose2}
         users={usersList && usersList}
       />
       <ToastContainer />
