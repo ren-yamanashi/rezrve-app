@@ -1,0 +1,12 @@
+  version: '3.8'
+  services:
+    db:
+      container_name: 'nextjs-peisma-db'
+      image: postgres:12
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_DB=nextjs-reserve-app-prisma
+        # - POSTGRES_HOST_AUTH_METHOD=trust
+      ports:
+        - '0.0.0.0:5438:5432'
