@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import UsersList from "../../components/organisms/manager/UserList";
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";

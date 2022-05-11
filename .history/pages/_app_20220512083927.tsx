@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import "../lib/firebase";
 import { RecoilRoot } from "recoil";
-import { AuthProvider } from "../hooks/useUserAuth";
+import { AuthProvider } from "../hooks/firebase/useUserAuth";
 
 const MyApp = ({ Component, pageProps }) => {
   return (

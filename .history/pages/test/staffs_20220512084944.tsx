@@ -26,7 +26,8 @@ const { MediaContextProvider, Media } = createMedia({
   },
 });
 
-export const getStaticProps: GetStaticProps = async () => {
+export const useGetStaticProps: GetStaticProps = async () => {
+  const { user } = useAuth();
   const feed = await prisma.user.findMany({
     where: { role: "staff" },
   });

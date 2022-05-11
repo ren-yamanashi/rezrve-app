@@ -1,21 +1,21 @@
 import * as React from "react";
-import UsersList from "../../components/organisms/manager/UserList";
-import prisma from "../../lib/prisma";
+import UsersList from "../components/organisms/manager/UserList";
+import prisma from "../lib/prisma";
 import { GetStaticProps } from "next";
-import { useHandle } from "../../hooks/useHandle";
-import { useCreateShift } from "../../hooks/firebase/manager/useCreateShift";
-import CreateStaff from "../../components/organisms/manager/CreateStaff";
-import CreateShiftModal from "../../components/templates/Modal/CreateShift_manager";
-import { useSelectReserve } from "../../hooks/useSelectReserve";
-import { useSelectUser_query } from "../../hooks/firebase/user/useUserList";
-import Title from "../../components/atoms/Text/PrimaryTitle";
-import Header from "../../components/templates/Header/HeaderNext";
-import HeaderAtMd from "../../components/templates/Header/Header";
+import { useHandle } from "../hooks/useHandle";
+import { useCreateShift } from "../hooks/firebase/manager/useCreateShift";
+import CreateStaff from "../components/organisms/manager/CreateStaff";
+import CreateShiftModal from "../components/templates/Modal/CreateShift_manager";
+import { useSelectReserve } from "../hooks/useSelectReserve";
+import { useSelectUser_query } from "../hooks/firebase/user/useUserList";
+import Title from "../components/atoms/Text/PrimaryTitle";
+import Header from "../components/templates/Header/HeaderNext";
+import HeaderAtMd from "../components/templates/Header/Header";
 import { createMedia } from "@artsy/fresnel";
 import { Box } from "@mui/material";
 import { ToastContainer } from "react-toastify";
-import { userProps } from "../../models/userProps";
-import { useAuth } from "../../hooks/useUserAuth";
+import { userProps } from "../models/userProps";
+import { useAuth } from "../hooks/useUserAuth";
 import Router from "next/router";
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
@@ -26,7 +26,8 @@ const { MediaContextProvider, Media } = createMedia({
   },
 });
 
-export const getStaticProps: GetStaticProps = async () => {
+export const useGetStaticProps: GetStaticProps = async () => {
+  // const { user } = useAuth();
   const feed = await prisma.user.findMany({
     where: { role: "staff" },
   });

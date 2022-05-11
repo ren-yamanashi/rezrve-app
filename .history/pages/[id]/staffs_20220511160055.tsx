@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import UsersList from "../../components/organisms/manager/UserList";
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
@@ -8,15 +8,13 @@ import CreateStaff from "../../components/organisms/manager/CreateStaff";
 import CreateShiftModal from "../../components/templates/Modal/CreateShift_manager";
 import { useSelectReserve } from "../../hooks/useSelectReserve";
 import { useSelectUser_query } from "../../hooks/firebase/user/useUserList";
-import Title from "../../components/atoms/Text/PrimaryTitle";
 import Header from "../../components/templates/Header/HeaderNext";
 import HeaderAtMd from "../../components/templates/Header/Header";
+import Title from "../../components/atoms/Text/PrimaryTitle";
 import { createMedia } from "@artsy/fresnel";
 import { Box } from "@mui/material";
 import { ToastContainer } from "react-toastify";
-import { userProps } from "../../models/userProps";
-import { useAuth } from "../../hooks/useUserAuth";
-import Router from "next/router";
+import { userProps } from "../../models/UserProps";
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
     sm: 0,
@@ -27,11 +25,9 @@ const { MediaContextProvider, Media } = createMedia({
 });
 
 export const getStaticProps: GetStaticProps = async () => {
-  const feed = await prisma.user.findMany({
-    where: { role: "staff" },
-  });
+  const feed = await prisma.user.findMany();
   const posts = JSON.parse(JSON.stringify(feed));
-  return { props: { posts } };
+  return { props: { posts }, paths: [`/[id]/staffs`], fallback: true };
 };
 
 type Props = {
@@ -40,17 +36,16 @@ type Props = {
 
 const StaffList: React.FC<Props> = (props) => {
   const { createShift } = useCreateShift();
-  const { open, handleClose1 } = useHandle();
+  const { open, handleOpen1, handleClose1 } = useHandle();
   const { user_query } = useSelectUser_query();
+  console.log(props.posts);
   const { handleChangeTime, rsvData, selectTeacher } = useSelectReserve();
+
   return (
     <>
       <MediaContextProvider>
         <Media greaterThan="md">
           <Header>
-            <Box>
-              <Title>スタッフ一覧</Title>
-            </Box>
             <Box mt={10}>
               {props.posts?.map((user) => (
                 <Box key={user.id}>

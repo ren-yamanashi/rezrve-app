@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import UsersList from "../../components/organisms/manager/UserList";
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
@@ -15,7 +15,7 @@ import { createMedia } from "@artsy/fresnel";
 import { Box } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import { userProps } from "../../models/userProps";
-import { useAuth } from "../../hooks/useUserAuth";
+import { useAuth } from "../../hooks/firebase/useUserAuth";
 import Router from "next/router";
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
@@ -27,8 +27,9 @@ const { MediaContextProvider, Media } = createMedia({
 });
 
 export const getStaticProps: GetStaticProps = async () => {
+  const { user } = useAuth();
   const feed = await prisma.user.findMany({
-    where: { role: "staff" },
+    where: { role: "staff", companyId: user?.displayName },
   });
   const posts = JSON.parse(JSON.stringify(feed));
   return { props: { posts } };

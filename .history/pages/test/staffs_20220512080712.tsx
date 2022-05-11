@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import UsersList from "../../components/organisms/manager/UserList";
 import prisma from "../../lib/prisma";
 import { GetStaticProps } from "next";
@@ -14,8 +14,8 @@ import HeaderAtMd from "../../components/templates/Header/Header";
 import { createMedia } from "@artsy/fresnel";
 import { Box } from "@mui/material";
 import { ToastContainer } from "react-toastify";
-import { userProps } from "../../models/userProps";
-import { useAuth } from "../../hooks/useUserAuth";
+import { userProps } from "../../models/UserProps";
+import { useAuth } from "../../hooks/firebase/useUserAuth";
 import Router from "next/router";
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
